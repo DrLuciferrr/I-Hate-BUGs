@@ -1,42 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Enemy : MonoBehaviour, IPointerClickHandler
+public class Enemy : MonoBehaviour, IPointerDownHandler
 {
-    [SerializeField] private bool isGlitch;
+     public bool isGlitch;
+
     [SerializeField] private float speed;
     [SerializeField] private float stressFactor;
     [SerializeField] private int clickToKill;
+    [SerializeField] private const int glitchID = 0;
 
-    
-    private Player player;
     private int currentClics = 0;
-    private Rigidbody2D rigidBody;
+    private bool insideGameZone = false;
 
-    //Различные модификаторы стресса выраженные константами
-    [SerializeField] private float mod_Fail = 2f, mod_Tick = 0.5f, mod_Glitch = 3f, mod_Kill = 1.5f;
+    private Player player;
+    private GameController gameController;
+
+    /* Модификаторы смены стресса: 
+     * Fail     - при ошибке(ПКМ по жуку);
+     * Glitch   - при срабатывании глича; 
+     * Kill     - при убийсве жука;
+     * Tick     - Увелечение стресса со временем; ------------ (нужен???)
+     */
+    [SerializeField]  private float
+        mod_Fail    = 1.5f, 
+        mod_Glitch  = 2.2f, 
+        mod_Kill    = 1.1f, 
+        mod_Tick    = 0.2f;
 
     private void Awake()
     {
         player = FindObjectOfType<Player>();
-        rigidBody = gameObject.GetComponent<Rigidbody2D>();
-        Move();
+        gameController = FindObjectOfType<GameController>();
+            
     }
 
     private void FixedUpdate()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-
-        }
+        Move();
     }
 
     //Метод для передвижения, чтоб легче было связать передвижение с анимацией
     private void Move()
     {
-        rigidBody.AddRelativeForce(Vector2.up * speed, ForceMode2D.Force);
+        transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
     /*  Реакция на ЛКМ.
@@ -50,12 +57,16 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
             currentClics++;
             if (currentClics == clickToKill)
             {
-                Destroy(gameObject);
+                Death();
                 player.StressChange(-stressFactor * mod_Kill);
             }
         }
         else
+        {
+            player.StressChange(stressFactor * mod_Glitch);
             GlichEffect();
+            Death();
+        }    
     }
 
     /*  Реакция на ПКМ.
@@ -66,41 +77,62 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
     {
         if (isGlitch)
         {
-            Destroy(gameObject);
-            player.StressChange(-stressFactor);
+            Death();
+            player.StressChange(-stressFactor * mod_Kill);
         }
         else
             player.StressChange(stressFactor * mod_Fail);
     }
 
     //Эффект срабатывания глича
-    private void GlichEffect()
+    
+
+    //Метод для смерти жука/глича
+    private void Death()
     {
-        player.StressChange(stressFactor*2);
+        Destroy(gameObject);
+        gameController.enemyCount--;
     }
 
-    /*  Реакция на появление в игровой зоне.
+    /*  Реакция на вход в игровую зону.
      *  Если жук  - добавляем StressFactor;
      *  Если глич - ничего;
+     *  Вне зависимости жук/баг включаем insideGameZone для отслеживания позиции на сцене;
      */
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        player.StressChange(stressFactor);
-    }
-    private void OnMouseDown()
-    {
-        LMBReact();
+        if(!isGlitch) 
+            player.StressChange(stressFactor);
+        insideGameZone = true;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    //Event отслеживания нажатия ПКМ или ЛКМ по врагу
+    public void OnPointerDown(PointerEventData eventData)
     {
         //Отслеживание ЛКМ
         if (eventData.button == PointerEventData.InputButton.Left)
-            //LMBReact();
-            print("LMB");
+            LMBReact();
         //Отслеживание ПКМ
         if (eventData.button == PointerEventData.InputButton.Right)
-            //RMBReact();
-            print("RMB");
+            RMBReact();
+    }
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     */
+    private void GlichEffect()
+    {
+        switch (glitchID)
+        {
+            case 0:
+                for (int i = 0; i < 3; i++)
+                {
+                    gameController.Spawn(gameObject, transform.position, Quaternion.Euler(0, 0, i * 120));
+                }
+                break;
+        }
     }
 }
