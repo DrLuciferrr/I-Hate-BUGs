@@ -13,12 +13,13 @@ public class Player : MonoBehaviour
         stress += stressFactor;
         if (stress < 0)
             stress = 0;
-        stressValue.text = stressMether.value.ToString();
         stressMether.value = stress;
+        stressValue.text = stressMether.value.ToString();
     }
 
     private void GameOver()
     { 
         
     }
+
 }

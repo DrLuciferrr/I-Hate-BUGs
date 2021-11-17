@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameController : MonoBehaviour
 {
@@ -8,6 +10,11 @@ public class GameController : MonoBehaviour
     private GameObject spawnedEnemy;
 
     private int spaceClicks = 0;
+
+    private void Awake()
+    {
+        //StartCoroutine("Test");
+    }
     private void Update()
     {
         if (Input.GetKeyDown("space"))
@@ -27,4 +34,18 @@ public class GameController : MonoBehaviour
         spawnedEnemy = Instantiate(enemy, position, rotation);
         enemyCount++;
     }
+
+    /*
+    private IEnumerator Test()
+    {
+        for (int i = 0; i < 60; i++)
+        {
+            Debug.Log("Moving");
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(5);
+        Debug.Log("Rotating");
+        StartCoroutine("Test");
+    }
+    */
 }

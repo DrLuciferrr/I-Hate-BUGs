@@ -754,7 +754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stress: 0
   stressMether: {fileID: 916712985}
-  stressValue: {fileID: 0}
+  stressValue: {fileID: 342689357}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

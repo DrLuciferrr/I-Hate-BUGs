@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,10 +9,9 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     [SerializeField] private float speed;
     [SerializeField] private float stressFactor;
     [SerializeField] private int clickToKill;
-    [SerializeField] private const int glitchID = 0;
 
     private int currentClics = 0;
-    private bool insideGameZone = false;
+    [SerializeField] private bool insideGameZone = false;
 
     private Player player;
     private GameController gameController;
@@ -22,11 +22,12 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
      * Kill     - при убийсве жука;
      * Tick     - Увелечение стресса со временем; ------------ (нужен???)
      */
-    [SerializeField]  private float
-        mod_Fail    = 1.5f, 
-        mod_Glitch  = 2.2f, 
-        mod_Kill    = 1.1f, 
-        mod_Tick    = 0.2f;
+    [SerializeField]
+    private float
+        mod_Fail    = 1.5f,
+        mod_Glitch  = 2.2f,
+        mod_Kill    = 1.1f;
+     // mod_Tick    = 0.2f;
 
     private void Awake()
     {
@@ -40,10 +41,19 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         Move();
     }
 
-    //Метод для передвижения, чтоб легче было связать передвижение с анимацией
-    private void Move()
+    //Метод отслеживания нажатия ПКМ или ЛКМ по врагу
+    public void OnPointerDown(PointerEventData eventData)
     {
-        transform.Translate(Vector2.up * speed * Time.deltaTime);
+        if (insideGameZone)
+        {
+            //Отслеживание ЛКМ
+            if (eventData.button == PointerEventData.InputButton.Left)
+                LMBReact();
+
+            //Отслеживание ПКМ
+            if (eventData.button == PointerEventData.InputButton.Right)
+                RMBReact();
+        }
     }
 
     /*  Реакция на ЛКМ.
@@ -58,15 +68,16 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             if (currentClics == clickToKill)
             {
                 Death();
-                player.StressChange(-stressFactor * mod_Kill);
+                player.StressChange(-stressFactor * mod_Kill); 
             }
         }
-        else
-        {
-            player.StressChange(stressFactor * mod_Glitch);
-            GlichEffect();
-            Death();
-        }    
+            else
+            {
+                player.StressChange(stressFactor * mod_Glitch);
+                GlichEffect();
+                Death();
+            }
+           
     }
 
     /*  Реакция на ПКМ.
@@ -76,16 +87,13 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     private void RMBReact()
     {
         if (isGlitch)
-        {
+         {
             Death();
             player.StressChange(-stressFactor * mod_Kill);
-        }
+         }
         else
-            player.StressChange(stressFactor * mod_Fail);
+              player.StressChange(stressFactor * mod_Fail);
     }
-
-    //Эффект срабатывания глича
-    
 
     //Метод для смерти жука/глича
     private void Death()
@@ -101,38 +109,33 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
      */
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!isGlitch) 
-            player.StressChange(stressFactor);
         insideGameZone = true;
+        if (!isGlitch) 
+            player.StressChange(stressFactor);
+
     }
 
-    //Event отслеживания нажатия ПКМ или ЛКМ по врагу
-    public void OnPointerDown(PointerEventData eventData)
+    //Следующие 2 метода (Move и GlitchEffect) будут уникальны для каждого противника, потому вынесены в самый низ, отдельно
+    //Метод для передвижения, чтоб легче было связать передвижение с анимацией
+    private void Move()
     {
-        //Отслеживание ЛКМ
-        if (eventData.button == PointerEventData.InputButton.Left)
-            LMBReact();
-        //Отслеживание ПКМ
-        if (eventData.button == PointerEventData.InputButton.Right)
-            RMBReact();
+        if (!insideGameZone)
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(0, 0), speed * Time.deltaTime);
+        else
+            transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
-    /*
-     * 
-     * 
-     * 
-     * 
-     */
+    private IEnumerator Movement()
+    {
+
+        yield return new WaitForSeconds(5);
+    }
+    //Эффект срабатывания глича
     private void GlichEffect()
     {
-        switch (glitchID)
+        for (int i = 0; i < 3; i++)
         {
-            case 0:
-                for (int i = 0; i < 3; i++)
-                {
-                    gameController.Spawn(gameObject, transform.position, Quaternion.Euler(0, 0, i * 120));
-                }
-                break;
-        }
+            gameController.Spawn(gameObject, transform.position, Quaternion.Euler(0, 0, i * 120));
+        }   
     }
 }
