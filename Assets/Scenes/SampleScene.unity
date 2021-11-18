@@ -1807,7 +1807,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.004449606, y: 0}
+  m_Offset: {x: -0.003659591, y: 0.0016345382}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1818,7 +1818,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.98601556, y: 1}
+  m_Size: {x: 0.90883124, y: 0.87609124}
   m_EdgeRadius: 0
 --- !u!114 &1836031928
 MonoBehaviour:
@@ -1835,6 +1835,8 @@ MonoBehaviour:
   enemyCount: 0
   enemy: {fileID: 2500772835160696971, guid: 3821ca20b3a0f7c4a99c13e9361d1f57, type: 3}
   player: {fileID: 519420030}
+  tickTime: 2
+  mod_Tick: 0.002
 --- !u!1 &1930594113
 GameObject:
   m_ObjectHideFlags: 0

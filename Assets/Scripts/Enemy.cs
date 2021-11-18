@@ -107,12 +107,19 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
      *  Если глич - ничего;
      *  Вне зависимости жук/баг включаем insideGameZone для отслеживания позиции на сцене;
      */
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D trigger)
     {
-        insideGameZone = true;
-        if (!isGlitch) 
-            player.StressChange(stressFactor);
-
+        if(!insideGameZone)
+        {
+            insideGameZone = true;
+            gameController.enemyCount++;
+            if (!isGlitch)
+                player.StressChange(stressFactor);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D trigger)
+    {
+        transform.Rotate(new Vector3(0,0,Random.Range(120,240)));
     }
 
     //Следующие 2 метода (Move и GlitchEffect) будут уникальны для каждого противника, потому вынесены в самый низ, отдельно
@@ -129,6 +136,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     {
 
         yield return new WaitForSeconds(5);
+
     }
     //Эффект срабатывания глича
     private void GlichEffect()

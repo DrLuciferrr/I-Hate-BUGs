@@ -5,15 +5,21 @@ using UnityEngine.EventSystems;
 public class GameController : MonoBehaviour
 {
     public int enemyCount;
+
+
     [SerializeField] private GameObject enemy;
     [SerializeField] private Player player;
     private GameObject spawnedEnemy;
 
     private int spaceClicks = 0;
 
+    [SerializeField] private float tickTime;
+    [SerializeField] private float mod_Tick;
+    private float tickValue;
+
     private void Awake()
     {
-        //StartCoroutine("Test");
+        StartCoroutine("StressTick");
     }
     private void Update()
     {
@@ -27,25 +33,26 @@ public class GameController : MonoBehaviour
                 spaceClicks = 0;
             }
         }
+
+
     }
 
     public void Spawn(GameObject enemyType, Vector2 position, Quaternion rotation)
     { 
         spawnedEnemy = Instantiate(enemy, position, rotation);
-        enemyCount++;
     }
 
-    /*
-    private IEnumerator Test()
+    
+    private IEnumerator StressTick()
     {
-        for (int i = 0; i < 60; i++)
+        if (enemyCount > 0)
         {
-            Debug.Log("Moving");
-            yield return new WaitForSeconds(0.1f);
+            tickValue = Mathf.Log(enemyCount) * mod_Tick;
+            player.StressChange(tickValue);
         }
-        yield return new WaitForSeconds(5);
-        Debug.Log("Rotating");
-        StartCoroutine("Test");
+        yield return new WaitForSecondsRealtime(tickTime);
+        Debug.Log("TICK " + tickValue);
+        StartCoroutine("StressTick");
     }
-    */
+    
 }
