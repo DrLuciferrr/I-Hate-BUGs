@@ -5,14 +5,14 @@ using UnityEngine.EventSystems;
 
 public class GameController : MonoBehaviour
 {
+    //—сылки на массив префабов врагов
+    [SerializeField] public GameObject[] Enemys_Prefabs = new GameObject[5];
+
     //List(динамический массив) с живыми врагами (добавл€ютс€ в него после входа в игровую зону, удал€ютс€ при смерти)
     public List<GameObject> Enemys_Alive = new List<GameObject>();
 
     //—сылка на скрипт игрока дл€ взаимодействи€ с его методами
     [SerializeField] private Player player;
-
-    //—сылки на массив префабов врагов
-    [SerializeField] private GameObject[] Enemys_Prefabs = new GameObject[5];
 
     //—сылка на последнего заспауненого моба
     private GameObject lastSpawnedEnemy;
@@ -85,8 +85,8 @@ public class RandomPoint
         Vector3 point;
         do
         {
-            point = new Vector2(Random.Range(-8.5f, 8.5f), Random.Range(-4.75f, 4.75f));
-            if (point.x <= 8.5 && point.x >= 5.5 || point.x <= -5.5 && point.x >= -8.5)
+            point = new Vector2(Random.Range(-6.5f, 6.5f), Random.Range(-4.75f, 4.75f));
+            if (point.x <= 6.5 && point.x >= 5.5 || point.x <= -5.5 && point.x >= -6.5)
                 if (point.y <= 4.75 && point.y >= 3.75 || point.y <= -3.75 && point.y >= -4.75)
                 {
                     isCorrect = true;

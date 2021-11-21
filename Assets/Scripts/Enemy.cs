@@ -153,7 +153,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             case 0:
                 for (int i = 0; i < 3; i++)
                 {
-                    gameController.Spawn(gameObject, transform.position, Quaternion.Euler(0, 0, i * 120 + Random.Range(0, 20)));
+                    gameController.Spawn(gameController.Enemys_Prefabs[0], transform.position, Quaternion.Euler(0, 0, i * 120));
                 }
                 break;
         }
