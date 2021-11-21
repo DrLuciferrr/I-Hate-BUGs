@@ -18,10 +18,12 @@ public class Player : MonoBehaviour
         stressMether.value = stress;
         stressValue.text = stressMether.value.ToString();
 
+        //Условие поражения
         if (stress >= 1)
             GameOver();
     }
 
+    //Метод, вызываемый при успловиях поражения
     private void GameOver()
     { 
         
