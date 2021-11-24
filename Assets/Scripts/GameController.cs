@@ -5,14 +5,15 @@ using UnityEngine.EventSystems;
 
 public class GameController : MonoBehaviour
 {
-    //—сылки на массив префабов врагов
+    //—сылка на массив префабов врагов
     [SerializeField] public GameObject[] Enemys_Prefabs = new GameObject[5];
 
     //List(динамический массив) с живыми врагами (добавл€ютс€ в него после входа в игровую зону, удал€ютс€ при смерти)
     public List<GameObject> Enemys_Alive = new List<GameObject>();
 
     //—сылка на скрипт игрока дл€ взаимодействи€ с его методами
-    [SerializeField] private Player player;
+    [SerializeField] private Player _player;
+    
 
     //—сылка на последнего заспауненого моба
     private GameObject lastSpawnedEnemy;
@@ -61,11 +62,11 @@ public class GameController : MonoBehaviour
     {
         if (Enemys_Alive.Count > 0)
         {
-            if (Enemys_Alive.Count == 1)
+            if (Enemys_Alive.Count <= 2)
                 tickValue = tickModificator;
             else
                 tickValue = Mathf.Log(Enemys_Alive.Count) * tickModificator;
-            player.StressChange(tickValue);
+            _player.StressChange(tickValue);
         }
         yield return new WaitForSecondsRealtime(tickTime);
         Debug.Log("TICK " + tickValue);
@@ -77,24 +78,35 @@ public class GameController : MonoBehaviour
 //—очинил свой класс дл€ создани€ рандомной подход€щей точки
 public class RandomPoint
 {
+
     private bool isCorrect = false;
+
 
     //¬ спаун зоне (дл€, не поверишь, спауна)
     public Vector3 InSpawnZone()
     {
+
         Vector3 point;
+        /*
         do
         {
             point = new Vector2(Random.Range(-6.5f, 6.5f), Random.Range(-4.75f, 4.75f));
-            if (point.x <= 6.5 && point.x >= 5.5 || point.x <= -5.5 && point.x >= -6.5)
-                if (point.y <= 4.75 && point.y >= 3.75 || point.y <= -3.75 && point.y >= -4.75)
+            if ((point.x <= 6.5 && point.x >= 5.5 || point.x <= -5.5 && point.x >= -6.5) && (point.y <= 4.75 && point.y >= 3.75 || point.y <= -3.75 && point.y >= -4.75))
                 {
                     isCorrect = true;
-                }
-                    
+                }     
+        } while (!isCorrect);
+        isCorrect = false;
+        */
+        do
+        {
+            point = new Vector2(Random.Range(-6.5f, 6.5f), Random.Range(-5.75f, 5.75f));
+            if (Vector2.Distance(point, Vector2.zero) >= 5.5 && Vector2.Distance(point, Vector2.zero) <= 6)
+                isCorrect = true;
         } while (!isCorrect);
         isCorrect = false;
         return point;
+        
     }
 
     //¬ игровой зоне (дл€ точек маршрута)

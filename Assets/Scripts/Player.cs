@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +24,8 @@ public class Player : MonoBehaviour
         if (stress >= 1)
             GameOver();
     }
+
+
 
     //Метод, вызываемый при успловиях поражения
     private void GameOver()
