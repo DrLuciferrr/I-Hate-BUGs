@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
         stressValue.text = stressMether.value.ToString();
 
         //Условие поражения
-        if (stress >= 1)
+        if (stress >= 100)
             GameOver();
     }
 
@@ -33,4 +33,5 @@ public class Player : MonoBehaviour
         
     }
 
+  
 }
