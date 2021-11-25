@@ -1734,8 +1734,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 224098d9fb8a80b4a8cde331aea5c11d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
   enemy: {fileID: 2500772835160696971, guid: 3821ca20b3a0f7c4a99c13e9361d1f57, type: 3}
 --- !u!1 &1930594113
+=======
+  _player: {fileID: 519420030}
+  Enemys_Prefabs:
+  - {fileID: 2500772835160696971, guid: 3821ca20b3a0f7c4a99c13e9361d1f57, type: 3}
+  - {fileID: 3279595673138171114, guid: 521cec920b28a4646bfc4848304db38a, type: 3}
+  - {fileID: 7256530894989448154, guid: cf9ce32b4c867924fb0f70894ec348ee, type: 3}
+  - {fileID: 8755896727753374785, guid: cbec80674e988c14b9990760327912c0, type: 3}
+  - {fileID: 0}
+  Enemys_Alive: []
+  WaveList:
+    Waves:
+    - EnemyInWave: 000000000000000001000000010000000000000000000000
+    - EnemyInWave: 00000000000000000200000003000000030000000100000000000000
+    - EnemyInWave: 00000000040000000500000004000000040000000200000003000000
+    - EnemyInWave: 0200000004000000000000000000000001000000060000000600000007000000
+    - EnemyInWave: 040000000200000005000000000000000000000001000000040000000200000003000000
+  spawnDelay: 1
+  waveDelay: 7
+  tickTime: 2
+  tickModificator: 1
+--- !u!1 &1893178207
+>>>>>>> Stashed changes
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
