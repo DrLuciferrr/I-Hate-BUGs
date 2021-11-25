@@ -17,7 +17,10 @@ public class GameController : MonoBehaviour
     //Ссылка на последнего заспауненого моба
     private GameObject lastSpawnedEnemy;
 
-    private enum SpawnedEnemyType
+    public WaveList WaveList = new WaveList();
+
+    [HideInInspector]
+    public enum SpawnedEnemyType
     {
         Crum,
         Crum_Glitch,
@@ -29,10 +32,10 @@ public class GameController : MonoBehaviour
         Wood_Louse_Glitch
     }
 
-    [SerializeField]
-    private List<SpawnedEnemyType> Spawner_List = new List<SpawnedEnemyType>();
-    
-    public float spawnDelay = 1f;
+    [SerializeField] 
+    private float 
+        spawnDelay, 
+        waveDelay;
 
     //Переменные для
     [SerializeField] private float tickTime;
@@ -98,54 +101,71 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitUntil(() => Input.GetKeyDown("space"));
 
-        foreach (SpawnedEnemyType enemy in Spawner_List)
+        int currentWave = 0;
+        foreach (Wave wave in WaveList.Waves)
         {
-            switch (enemy)
+            foreach (SpawnedEnemyType enemy in WaveList.Waves[currentWave].EnemyInWave)
             {
-                case SpawnedEnemyType.Crum:
-                    Spawn(Enemys_Prefabs[0], randomPoint.InSpawnZone(), Quaternion.identity);
-                    break;
+                switch (enemy)
+                {
+                    case SpawnedEnemyType.Crum:
+                        Spawn(Enemys_Prefabs[0], randomPoint.InSpawnZone(), Quaternion.identity);
+                        break;
 
-                case SpawnedEnemyType.Crum_Glitch:
-                    Spawn(Enemys_Prefabs[0], randomPoint.InSpawnZone(), Quaternion.identity);
-                    lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
-                    break;
+                    case SpawnedEnemyType.Crum_Glitch:
+                        Spawn(Enemys_Prefabs[0], randomPoint.InSpawnZone(), Quaternion.identity);
+                        lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
+                        break;
 
-                case SpawnedEnemyType.Fly:
-                    Spawn(Enemys_Prefabs[1], randomPoint.InSpawnZone(), Quaternion.identity);
-                    break;
+                    case SpawnedEnemyType.Fly:
+                        Spawn(Enemys_Prefabs[1], randomPoint.InSpawnZone(), Quaternion.identity);
+                        break;
 
-                case SpawnedEnemyType.Fly_Glitch:
-                    Spawn(Enemys_Prefabs[1], randomPoint.InSpawnZone(), Quaternion.identity);
-                    lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
-                    break;
+                    case SpawnedEnemyType.Fly_Glitch:
+                        Spawn(Enemys_Prefabs[1], randomPoint.InSpawnZone(), Quaternion.identity);
+                        lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
+                        break;
 
-                case SpawnedEnemyType.Cockroach:
-                    Spawn(Enemys_Prefabs[2], randomPoint.InSpawnZone(), Quaternion.identity);
-                    break;
+                    case SpawnedEnemyType.Cockroach:
+                        Spawn(Enemys_Prefabs[2], randomPoint.InSpawnZone(), Quaternion.identity);
+                        break;
 
-                case SpawnedEnemyType.Cockroach_Glitch:
-                    Spawn(Enemys_Prefabs[2], randomPoint.InSpawnZone(), Quaternion.identity);
-                    lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
-                    break;
+                    case SpawnedEnemyType.Cockroach_Glitch:
+                        Spawn(Enemys_Prefabs[2], randomPoint.InSpawnZone(), Quaternion.identity);
+                        lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
+                        break;
 
-                case SpawnedEnemyType.Wood_Louse:
-                    Spawn(Enemys_Prefabs[3], randomPoint.InSpawnZone(), Quaternion.identity);
-                    break;
+                    case SpawnedEnemyType.Wood_Louse:
+                        Spawn(Enemys_Prefabs[3], randomPoint.InSpawnZone(), Quaternion.identity);
+                        break;
 
-                case SpawnedEnemyType.Wood_Louse_Glitch:
-                    Spawn(Enemys_Prefabs[3], randomPoint.InSpawnZone(), Quaternion.identity);
-                    lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
-                    break;
-                    
+                    case SpawnedEnemyType.Wood_Louse_Glitch:
+                        Spawn(Enemys_Prefabs[3], randomPoint.InSpawnZone(), Quaternion.identity);
+                        lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
+                        break;
+                }
+                yield return new WaitForSecondsRealtime(spawnDelay);
             }
             yield return new WaitForSecondsRealtime(spawnDelay);
+            currentWave++;
         }
-
-
+        
     }
 
 }
+
+[System.Serializable]
+public class Wave
+{
+    public List<GameController.SpawnedEnemyType> EnemyInWave;
+}
+
+[System.Serializable]
+public class WaveList
+{
+    public List<Wave> Waves;
+}
+
 
 //Сочинил свой класс для создания рандомной подходящей точки
 public class RandomPoint
