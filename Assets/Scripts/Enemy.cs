@@ -81,7 +81,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
 
     private void FixedUpdate()
     {
-        Debug.Log(Vector3.Distance(this.transform.position, targetPoint));
+
     }
     //Метод отслеживания нажатия ПКМ или ЛКМ по врагу
     public void OnPointerDown(PointerEventData eventData)
@@ -117,8 +117,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             _player.StressChange(stressFactor * mod_Glitch);
             GlichEffect();
             Death();
-        }
-           
+        }    
     }
 
     // Реакция на ПКМ.
