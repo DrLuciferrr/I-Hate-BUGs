@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         //Запуск корутины Спаунера
-        StartCoroutine(Spawner(spawnDelay));
+        StartCoroutine(Spawner());
 
         //Запуск корутины отвечающей за пассивный прирост стресса от кол-ва живых жуков
         StartCoroutine(StressTick()); 
@@ -97,7 +97,7 @@ public class GameController : MonoBehaviour
         StartCoroutine("StressTick");
     }
 
-    private IEnumerator Spawner(float spawnDelay)
+    private IEnumerator Spawner()
     {
         yield return new WaitUntil(() => Input.GetKeyDown("space"));
 
@@ -146,7 +146,7 @@ public class GameController : MonoBehaviour
                 }
                 yield return new WaitForSecondsRealtime(spawnDelay);
             }
-            yield return new WaitForSecondsRealtime(spawnDelay);
+            yield return new WaitForSecondsRealtime(waveDelay);
             currentWave++;
         }
         
