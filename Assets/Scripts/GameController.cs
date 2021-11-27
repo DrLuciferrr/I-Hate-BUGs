@@ -135,6 +135,10 @@ public class GameController : MonoBehaviour
         
     }
 
+    public void GlitchStart(Enemy enemy)
+    {
+        StartCoroutine(enemy.GlichEffect());
+    }
 }
 
 [System.Serializable]

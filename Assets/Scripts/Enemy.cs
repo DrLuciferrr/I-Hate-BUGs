@@ -116,7 +116,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         else
         {
             _player.StressChange(stressFactor * mod_Glitch);
-            StartCoroutine(GlichEffect());
+            _gameController.GlitchStart(this);
             Death();
         }    
     }
@@ -212,7 +212,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     }
 
     //Ёффект срабатывани€ глича
-    private IEnumerator GlichEffect()
+    public IEnumerator GlichEffect()
     {
         switch (enemyType)
         {
