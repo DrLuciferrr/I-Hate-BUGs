@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac4c6b8fec1fd24ebcf4613bef931fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 1
   isGlitch: 0
   speed: 4.2
   stressFactor: 2

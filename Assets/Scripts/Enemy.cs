@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -115,7 +116,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         else
         {
             _player.StressChange(stressFactor * mod_Glitch);
-            GlichEffect();
+            StartCoroutine(GlichEffect());
             Death();
         }    
     }
@@ -131,14 +132,14 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         }
         //Если жук - добавляем стресс(StressFactor * mod_Fail) за ошибку;
         else
-              _player.StressChange(stressFactor * mod_Fail);
+            _player.StressChange(stressFactor * mod_Fail);
     }
 
     //Метод для смерти жука/глича
     private void Death()
     {
         Destroy(gameObject);
-        _gameController.Enemys_Alive.Remove(this.gameObject);
+        _gameController.Enemies_Alive.Remove(this.gameObject);
     }
 
     /*  Реакция на вход в игровую зону.
@@ -151,7 +152,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         if(!insideGameZone)
         {
             insideGameZone = true;
-            _gameController.Enemys_Alive.Add(this.gameObject);
+            _gameController.Enemies_Alive.Add(this.gameObject);
             if (!isGlitch)
                 _player.StressChange(stressFactor);
         }
@@ -177,7 +178,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     //Следующие 2 метода (MovePattern и GlitchEffect) будут уникальны для каждого противника, потому вынесены в самый низ, отдельно
     //Метод для передвижения, чтоб легче было связать передвижение с анимацией
 
-    public IEnumerator MovePattern()
+    private IEnumerator MovePattern()
     {
         switch (enemyType)
         {
@@ -191,6 +192,13 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 break;
 
             case EnemyType.Fly:
+                //Затычка
+                yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
+                _rigidbody.velocity = Vector3.zero;
+                FindNextTargetPoint();
+                yield return new WaitForSecondsRealtime(1.5f);
+                transform.Rotate(Vector3.forward, rotationAngle);
+                _rigidbody.velocity = this.transform.up * speed;
                 break;
 
             case EnemyType.Wood_Louse:
@@ -204,17 +212,42 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     }
 
     //Эффект срабатывания глича
-    private void GlichEffect()
+    private IEnumerator GlichEffect()
     {
         switch (enemyType)
         {
+            //Клоп - спаун 3 Клопов(жуков) из позиции глича при клике
             case EnemyType.Crum:
                 for (int i = 0; i < 3; i++)
-                    _gameController.Spawn(_gameController.Enemys_Prefabs[0], transform.position, Quaternion.Euler(0, 0, i * 120));
-                break;
+                    _gameController.Spawn(_gameController.Enemies_Prefabs[0], transform.position, Quaternion.identity);
+                yield break;
 
+            //Муха - ускорение в 1.5 раза (speed*1.5) всех живых противников на сцене на 5 секкунд.
+            //В случае если глич активируется повторно в течении действия эффекта - длительность обновляется
             case EnemyType.Fly:
-                break;
+
+
+                List<GameObject> Affected_Enemies = new List<GameObject>();
+                foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
+                    Affected_Enemies.Add(livingEnemy);
+
+                foreach (GameObject affectedEnemy in Affected_Enemies)
+                    affectedEnemy.GetComponent<Enemy>().speed = affectedEnemy.GetComponent<Enemy>().speed * 1.5f;
+                Debug.Log("SPEED UP");
+                yield return new WaitForSecondsRealtime(5);
+
+                /*
+                foreach (GameObject affectedEnemy in Affected_Enemies)
+                {
+                    if (affectedEnemy != null)
+                        affectedEnemy.GetComponent<Enemy>().speed = affectedEnemy.GetComponent<Enemy>().speed / 1.5f;
+                        
+                    else
+                        continue;
+                }
+                */
+                Debug.Log("SPEED DOWN");
+                yield break;                
 
             case EnemyType.Wood_Louse:
                 break;

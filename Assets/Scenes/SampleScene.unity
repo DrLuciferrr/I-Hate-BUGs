@@ -1274,19 +1274,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 519420030}
-  Enemys_Prefabs:
+  Enemies_Prefabs:
   - {fileID: 2500772835160696971, guid: 3821ca20b3a0f7c4a99c13e9361d1f57, type: 3}
   - {fileID: 3279595673138171114, guid: 521cec920b28a4646bfc4848304db38a, type: 3}
   - {fileID: 7256530894989448154, guid: cf9ce32b4c867924fb0f70894ec348ee, type: 3}
   - {fileID: 7975550634287878038, guid: f1409ceccd149ca489cc9478d3bdde72, type: 3}
   - {fileID: 0}
-  Enemys_Alive: []
+  Enemies_Alive: []
   WaveList:
     Waves:
-    - EnemyInWave: 0000000000000000
-    - EnemyInWave: 00000000000000000000000000000000
-    - EnemyInWave: 00000000000000000000000000000000
-    - EnemyInWave: 00000000000000000000000000000000
+    - EnemyInWave: 000000000000000000000000000000000300000003000000
+    - EnemyInWave: 06000000060000000400000004000000
   spawnDelay: 0.5
   waveDelay: 5
   tickTime: 2
