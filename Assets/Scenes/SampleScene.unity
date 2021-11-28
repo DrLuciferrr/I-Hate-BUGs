@@ -1309,6 +1309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2d7f418e3fb3746a19454d5ba5b637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  stressAffect: 0
 --- !u!1 &1836031924
 GameObject:
   m_ObjectHideFlags: 0

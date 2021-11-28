@@ -1,3 +1,4 @@
+using AllIn1SpriteShader;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,8 +89,16 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     private Vector3 targetPoint;
     Vector3 direction;
     float rotationAngle;
+
+    Material _shader;
+    AllIn1Shader _in1Shader;
+    Animator _animator;
     private void Awake()
     {
+        //this.gameObject.AddComponent<AllIn1Shader>();
+        //this.gameObject.GetComponent<AllIn1Shader>().CleanMaterial();
+        //this.gameObject.GetComponent<AllIn1Shader>().shaderTypes = AllIn1Shader.ShaderTypes.Default;
+        //this.gameObject.GetComponent<AllIn1Shader>().TryCreateNew();
         //Запоминание базовой скорости и ХП
         base_speed = speed;
         base_clickToKill = clickToKill;
@@ -103,6 +112,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
 
     private void Start()
     {
+        
         FindNextTargetPoint();
         transform.Rotate(Vector3.forward, rotationAngle);
         _rigidbody.velocity = this.transform.up * speed;
