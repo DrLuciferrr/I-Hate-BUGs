@@ -142,7 +142,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         else
         {
             _player.StressChange(stressFactor * mod_Glitch);
-            _gameController.GlitchStart(this);
+            GlichEffect();
             Death();
         }    
     }
@@ -248,7 +248,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     }
 
     //Эффект срабатывания глича
-    public IEnumerator GlichEffect()
+    public void GlichEffect()
     {
         switch (enemyType)
         {
@@ -256,30 +256,30 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             case EnemyType.Crum:
                 for (int i = 0; i < 3; i++)
                     _gameController.Spawn(_gameController.Enemies_Prefabs[0], transform.position, Quaternion.identity);
-                yield break;
+                break;
 
             //Муха - ускорение (speed*glitchModify) всех живых противников на сцене которые не были ускорены ранее
             case EnemyType.Fly:
                 foreach (GameObject livingEnemy in _gameController.Enemies_Alive) 
                 {
-                    if (livingEnemy.GetComponent<Enemy>().speed != livingEnemy.GetComponent<Enemy>().base_speed)
+                    if (livingEnemy.GetComponent<Enemy>().speed == livingEnemy.GetComponent<Enemy>().base_speed)
                         livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;              
                 }
-                yield break;
+                break;
 
             //Таракан - Область вокруг глича затемняется на (glitchDuration) секкунд
             case EnemyType.Cockroach:
-                yield break;
+                break;
                 
             //Мокрица - увеличение ХП (clickToKill*glitchModify) всех живых противников на сцене которые не были усилены ранее
 
             case EnemyType.Wood_Louse:
                 foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
                 {
-                    if (livingEnemy.GetComponent<Enemy>().clickToKill != livingEnemy.GetComponent<Enemy>().base_clickToKill)
+                    if (livingEnemy.GetComponent<Enemy>().clickToKill == livingEnemy.GetComponent<Enemy>().base_clickToKill)
                         livingEnemy.GetComponent<Enemy>().clickToKill = livingEnemy.GetComponent<Enemy>().clickToKill * glitchModify;
                 }
-                yield break;
+                break;
         }
     }
 }

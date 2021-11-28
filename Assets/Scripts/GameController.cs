@@ -68,12 +68,6 @@ public class GameController : MonoBehaviour
         //Запуск корутины отвечающей за пассивный прирост стресса от кол-ва живых жуков
         StartCoroutine(StressTick());
     }
-
-    //Метод для запуска глича через ГК, иначе таймеры ломатся
-    public void GlitchStart(Enemy enemy)
-    {
-        StartCoroutine(enemy.GlichEffect());
-    }
     
     //Корутина пассивно (раз в tickTime секкунд) увеличивающая стресс в зависимости от кол-ва живых жуков
     private IEnumerator StressTick()
