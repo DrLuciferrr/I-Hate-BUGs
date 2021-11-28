@@ -130,11 +130,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac4c6b8fec1fd24ebcf4613bef931fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 2
   isGlitch: 0
   speed: 2.1
   stressFactor: 1
   clickToKill: 3
+  glitchModify: 0
   mod_Fail: 1.5
   mod_Glitch: 2
   mod_Kill: 1.2

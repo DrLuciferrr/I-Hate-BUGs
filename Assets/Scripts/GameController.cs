@@ -9,15 +9,21 @@ public class GameController : MonoBehaviour
     [SerializeField] private Player _player;
 
     //Ссылка на массив префабов врагов
-    public GameObject[] Enemies_Prefabs = new GameObject[5];
+    [Header("Префабы всех врагов")]
+    [Space] 
+        public GameObject[] Enemies_Prefabs = new GameObject[5];
 
     //List(динамический массив) с живыми врагами (добавляются в него после входа в игровую зону, удаляются при смерти)
-    public List<GameObject> Enemies_Alive = new List<GameObject>();
+    [Header("Список живых на данный момент врагов")]
+    [Space] 
+        public List<GameObject> Enemies_Alive = new List<GameObject>();
 
     //Ссылка на последнего заспауненого моба
     private GameObject lastSpawnedEnemy;
 
-    public WaveList WaveList = new WaveList();
+    [Header("Конструктор волн")]
+    [Space] 
+        public WaveList WaveList = new WaveList();
 
     [HideInInspector]
     public enum SpawnedEnemyType
@@ -32,15 +38,24 @@ public class GameController : MonoBehaviour
         Wood_Louse_Glitch
     }
 
-    [SerializeField] 
-    private float 
-        spawnDelay, 
-        waveDelay;
+    [Header("Тайминги волн")]
+    [Space]
+        [Tooltip("Время между врагами в пределах волны")]
+        [SerializeField] private float spawnDelay;
+
+        [Tooltip("Время между волнами")]
+        [SerializeField] private float waveDelay;
 
     //Переменные для
-    [SerializeField] private float tickTime;
-    [SerializeField] private float tickModificator;
-    private float tickValue;
+    [Header("Тик стресса")]
+    [Space]
+        [Tooltip("Время между тиками")]
+        [SerializeField] private float tickTime;
+
+        [Tooltip("Множитель")]
+        [SerializeField] private float tickModificator;
+        
+        private float tickValue;
 
     //Создаем новый экземпляр генератора точек для взаимодействия с ним
     RandomPoint randomPoint = new RandomPoint();
@@ -51,19 +66,15 @@ public class GameController : MonoBehaviour
         StartCoroutine(Spawner());
 
         //Запуск корутины отвечающей за пассивный прирост стресса от кол-ва живых жуков
-        StartCoroutine(StressTick()); 
+        StartCoroutine(StressTick());
     }
-    private void Update()
+
+    //Метод для запуска глича через ГК, иначе таймеры ломатся
+    public void GlitchStart(Enemy enemy)
     {
-
+        StartCoroutine(enemy.GlichEffect());
     }
-
-    //Метод для спауна врага. Принимает в себя: 1) Тип врага, 2) Точку спауна, 3) Базовый поворот врага
-    public void Spawn(GameObject enemyType, Vector2 position, Quaternion rotation)
-    {
-        lastSpawnedEnemy = Instantiate(enemyType, position, rotation);
-    }
-
+    
     //Корутина пассивно (раз в tickTime секкунд) увеличивающая стресс в зависимости от кол-ва живых жуков
     private IEnumerator StressTick()
     {
@@ -80,6 +91,13 @@ public class GameController : MonoBehaviour
         StartCoroutine("StressTick");
     }
 
+    //Метод для спауна врага. Принимает в себя: 1) Тип врага, 2) Точку спауна, 3) Базовый поворот врага
+    public void Spawn(GameObject enemyType, Vector2 position, Quaternion rotation)
+    {
+        lastSpawnedEnemy = Instantiate(enemyType, position, rotation);
+    }
+    
+    //Спаунер волнами
     private IEnumerator Spawner()
     {
         yield return new WaitUntil(() => Input.GetKeyDown("space"));
@@ -134,37 +152,32 @@ public class GameController : MonoBehaviour
         }
         
     }
-
-    public void GlitchStart(Enemy enemy)
-    {
-        StartCoroutine(enemy.GlichEffect());
-    }
+    
+    
 }
 
+//2 класса для создания таблицы из таблиц и вывод их в инспектор
 [System.Serializable]
 public class Wave
-{
-    public List<GameController.SpawnedEnemyType> EnemyInWave;
+{    
+    public List<GameController.SpawnedEnemyType> EnemyInWave; 
 }
 
 [System.Serializable]
 public class WaveList
-{
-    public List<Wave> Waves;
+{  
+    public List<Wave> Waves;    
 }
 
 
 //Сочинил свой класс для создания рандомной подходящей точки
 public class RandomPoint
 {
-
     private bool isCorrect = false;
-
 
     //В спаун зоне (для, не поверишь, спауна)
     public Vector3 InSpawnZone()
     {
-
         Vector3 point;
         do
         {
@@ -173,8 +186,7 @@ public class RandomPoint
                 isCorrect = true;
         } while (!isCorrect);
         isCorrect = false;
-        return point;
-        
+        return point;  
     }
 
     //В игровой зоне (для точек маршрута)
@@ -183,6 +195,4 @@ public class RandomPoint
         Vector3 point = new Vector2(Random.Range(-4.5f, 4.5f), Random.Range(-3f, 3f));
         return point;
     }
-
-    //Тут нужно написать корутину гличей, ибо запускать корпутину в объекте, который уничтожается - не вариант
 }

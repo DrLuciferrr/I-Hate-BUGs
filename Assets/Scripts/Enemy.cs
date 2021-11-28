@@ -19,21 +19,40 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         Wood_Louse
     }
 
+    [Header("Тип врага + определение жук/глич")]
     //Перемена для записи выбора в Enemy Type
-    public EnemyType enemyType;
+        public EnemyType enemyType;
     
     //Определение жук/глич (false/true), Default: false;
-    public bool isGlitch = false;
+        public bool isGlitch = false;
 
     /*Переменные характиристик врага
      * speed - скорость передвижения (в чем?)
      * stressFactor - базовое значение начисляемого страсса от жука/глича которое меняется модификаторами
      * clickToKill -  базовое значение ХП (количество кликов по жуку для убийства)
      */
+    [Header("Хар-ки противника")]
+    [Space]
+        [Tooltip("Скорость")]
+        [SerializeField] private float speed;
+                         private float base_speed;
+
+        [Tooltip("Стресс Фактор")]
+        [SerializeField] private float stressFactor;
+
+        [Tooltip("ХП")]
+        [SerializeField] private float clickToKill;
+                         private float base_clickToKill;
+
+    [Header("Хар-ки глича")]
+    [Space]
+    //
+    //    [Tooltip("Длительность эффекта глича")]
+    //    [SerializeField] private float glitchDuration;
+
+        [Tooltip("Сила эффекта глича(например множитель скоростиs у мухи)")]
+        [SerializeField] private float glitchModify;
     
-    [SerializeField] private float speed;
-    [SerializeField] private float stressFactor;
-    [SerializeField] private int clickToKill;
 
     //Переменная для отслеживания уже сделанных кликов по жуку
     private int currentClics = 0;
@@ -52,11 +71,18 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
      * Glitch   - при срабатывании глича; 
      * Kill     - при убийсве жука;
      */
-    [SerializeField]
-    private float
-        mod_Fail,
-        mod_Glitch,
-        mod_Kill;
+
+    [Header("Модификаторы событий")]
+    [Space]
+
+    [Tooltip("Ошибка при выявлении глича")]
+    [SerializeField] private float mod_Fail;
+
+    [Tooltip("Срабатывание эффекта глича")]
+    [SerializeField] private float mod_Glitch;
+
+    [Tooltip("Убийство жука/глича")]
+    [SerializeField] private float mod_Kill;
     //PS. сделать константными с конкремными значениями 
 
     private Vector3 targetPoint;
@@ -64,6 +90,10 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     float rotationAngle;
     private void Awake()
     {
+        //Запоминание базовой скорости и ХП
+        base_speed = speed;
+        base_clickToKill = clickToKill;
+
         //Получение нужных компонентов
         _rigidbody = GetComponent<Rigidbody2D>();
         _player = FindObjectOfType<Player>();
@@ -80,10 +110,6 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         StartCoroutine(MovePattern());
     }
 
-    private void FixedUpdate()
-    {
-
-    }
     //Метод отслеживания нажатия ПКМ или ЛКМ по врагу
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -135,13 +161,6 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             _player.StressChange(stressFactor * mod_Fail);
     }
 
-    //Метод для смерти жука/глича
-    private void Death()
-    {
-        Destroy(gameObject);
-        _gameController.Enemies_Alive.Remove(this.gameObject);
-    }
-
     /*  Реакция на вход в игровую зону.
      *  Если жук  - добавляем StressFactor;
      *  Если глич - ничего;
@@ -157,12 +176,8 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 _player.StressChange(stressFactor);
         }
     }
-    private void OnTriggerExit2D(Collider2D trigger)
-    {
-        //StopCoroutine("Move");
-        //StartCoroutine(Move(_randomPoint.InGameZone()));
-    }
 
+    //Метод для поиска точки пути
     private Vector3 FindNextTargetPoint()
     {
         do
@@ -173,6 +188,13 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         direction = targetPoint - this.transform.position;
         rotationAngle = Vector3.SignedAngle(this.transform.up.normalized, direction.normalized, Vector3.forward);
         return targetPoint;
+    }
+
+    //Метод для смерти жука/глича
+    private void Death()
+    {
+        Destroy(gameObject);
+        _gameController.Enemies_Alive.Remove(this.gameObject);
     }
 
     //Следующие 2 метода (MovePattern и GlitchEffect) будут уникальны для каждого противника, потому вынесены в самый низ, отдельно
@@ -202,9 +224,23 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 break;
 
             case EnemyType.Wood_Louse:
+                //Затычка
+                yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
+                _rigidbody.velocity = Vector3.zero;
+                FindNextTargetPoint();
+                yield return new WaitForSecondsRealtime(1.5f);
+                transform.Rotate(Vector3.forward, rotationAngle);
+                _rigidbody.velocity = this.transform.up * speed;
                 break;
 
             case EnemyType.Cockroach:
+                //Затычка
+                yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
+                _rigidbody.velocity = Vector3.zero;
+                FindNextTargetPoint();
+                yield return new WaitForSecondsRealtime(1.5f);
+                transform.Rotate(Vector3.forward, rotationAngle);
+                _rigidbody.velocity = this.transform.up * speed;
                 break;
 
         }
@@ -222,38 +258,28 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                     _gameController.Spawn(_gameController.Enemies_Prefabs[0], transform.position, Quaternion.identity);
                 yield break;
 
-            //Муха - ускорение в 1.5 раза (speed*1.5) всех живых противников на сцене на 5 секкунд.
-            //В случае если глич активируется повторно в течении действия эффекта - длительность обновляется
+            //Муха - ускорение (speed*glitchModify) всех живых противников на сцене которые не были ускорены ранее
             case EnemyType.Fly:
-
-
-                List<GameObject> Affected_Enemies = new List<GameObject>();
-                foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
-                    Affected_Enemies.Add(livingEnemy);
-
-                foreach (GameObject affectedEnemy in Affected_Enemies)
-                    affectedEnemy.GetComponent<Enemy>().speed = affectedEnemy.GetComponent<Enemy>().speed * 1.5f;
-                Debug.Log("SPEED UP");
-                yield return new WaitForSecondsRealtime(5);
-
-                /*
-                foreach (GameObject affectedEnemy in Affected_Enemies)
+                foreach (GameObject livingEnemy in _gameController.Enemies_Alive) 
                 {
-                    if (affectedEnemy != null)
-                        affectedEnemy.GetComponent<Enemy>().speed = affectedEnemy.GetComponent<Enemy>().speed / 1.5f;
-                        
-                    else
-                        continue;
+                    if (livingEnemy.GetComponent<Enemy>().speed != livingEnemy.GetComponent<Enemy>().base_speed)
+                        livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;              
                 }
-                */
-                Debug.Log("SPEED DOWN");
-                yield break;                
+                yield break;
+
+            //Таракан - Область вокруг глича затемняется на (glitchDuration) секкунд
+            case EnemyType.Cockroach:
+                yield break;
+                
+            //Мокрица - увеличение ХП (clickToKill*glitchModify) всех живых противников на сцене которые не были усилены ранее
 
             case EnemyType.Wood_Louse:
-                break;
-
-            case EnemyType.Cockroach:
-                break;
+                foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
+                {
+                    if (livingEnemy.GetComponent<Enemy>().clickToKill != livingEnemy.GetComponent<Enemy>().base_clickToKill)
+                        livingEnemy.GetComponent<Enemy>().clickToKill = livingEnemy.GetComponent<Enemy>().clickToKill * glitchModify;
+                }
+                yield break;
         }
     }
 }

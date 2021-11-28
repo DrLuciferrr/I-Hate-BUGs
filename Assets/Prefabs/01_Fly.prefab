@@ -52,6 +52,7 @@ MonoBehaviour:
   speed: 4.2
   stressFactor: 2
   clickToKill: 1
+  glitchModify: 2
   mod_Fail: 1.5
   mod_Glitch: 2
   mod_Kill: 1.2
