@@ -47,13 +47,14 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
 
     [Header("Хар-ки глича")]
     [Space]
-    //
-    //    [Tooltip("Длительность эффекта глича")]
-    //    [SerializeField] private float glitchDuration;
-
         [Tooltip("Сила эффекта глича(например множитель скоростиs у мухи)")]
         [SerializeField] private float glitchModify;
-    
+
+        [Tooltip("Длительность подсветки глича")]
+        [SerializeField] private float glitchingDuration;
+
+        [Tooltip("Пауза между подсветками")]
+        [SerializeField] private float glitchingCooldown;
 
     //Переменная для отслеживания уже сделанных кликов по жуку
     private int currentClics = 0;
@@ -90,21 +91,17 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     Vector3 direction;
     float rotationAngle;
 
-    Material _shader;
-    AllIn1Shader _in1Shader;
+
     Animator _animator;
     private void Awake()
     {
-        //this.gameObject.AddComponent<AllIn1Shader>();
-        //this.gameObject.GetComponent<AllIn1Shader>().CleanMaterial();
-        //this.gameObject.GetComponent<AllIn1Shader>().shaderTypes = AllIn1Shader.ShaderTypes.Default;
-        //this.gameObject.GetComponent<AllIn1Shader>().TryCreateNew();
         //Запоминание базовой скорости и ХП
         base_speed = speed;
         base_clickToKill = clickToKill;
 
         //Получение нужных компонентов
         _rigidbody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
         _player = FindObjectOfType<Player>();
         _gameController = FindObjectOfType<GameController>();
         _randomPoint = new RandomPoint();
@@ -118,12 +115,17 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         _rigidbody.velocity = this.transform.up * speed;
 
         StartCoroutine(MovePattern());
+        if (isGlitch)
+            StartCoroutine(Glitching());
     }
 
+    private void Update()
+    {
+    }
     //Метод отслеживания нажатия ПКМ или ЛКМ по врагу
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (insideGameZone)
+        if (insideGameZone && currentClics < clickToKill)
         {
             //Отслеживание ЛКМ
             if (eventData.button == PointerEventData.InputButton.Left)
@@ -138,22 +140,22 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     //  Реакция на ЛКМ.
     private void LMBReact()
     {
+        // Если глич - добавляем стресс(StressFactor * mod_Glitch) и вызываем GlichEffect;
+        if (isGlitch)
+        {
+            _player.StressChange(stressFactor * mod_Glitch);
+            playDeathAnim();
+            GlichEffect();
+        }
         //Если жук  -засчитываем клики до clickToKill, после убиваем и снижаем стресс(StressFactor * mod_Kill);
-        if (!isGlitch)
+        else
         {
             currentClics++;
             if (currentClics == clickToKill)
             {
-                Death();
-                _player.StressChange(-stressFactor * mod_Kill); 
+                _player.StressChange(-stressFactor * mod_Kill);
+                playDeathAnim();
             }
-        }
-        //Если глич - добавляем стресс (StressFactor * mod_Glitch) и вызываем GlichEffect;
-        else
-        {
-            _player.StressChange(stressFactor * mod_Glitch);
-            GlichEffect();
-            Death();
         }    
     }
 
@@ -163,7 +165,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         //Если глич - убиваем и снижаем стресс (StressFactor * mod_Kill);
         if (isGlitch)
         {
-            Death();
+            playDeathAnim();
             _player.StressChange(-stressFactor * mod_Kill);
         }
         //Если жук - добавляем стресс(StressFactor * mod_Fail) за ошибку;
@@ -200,10 +202,24 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         return targetPoint;
     }
 
+    private IEnumerator Glitching()
+    {
+        yield return new WaitForSecondsRealtime(glitchingCooldown);
+        _animator.SetFloat("Glitching", 1);
+        yield return new WaitForSecondsRealtime(glitchingDuration);
+        _animator.SetFloat("Glitching", 0);
+        StartCoroutine(Glitching());
+    }    
+    private void playDeathAnim()
+    {
+        _rigidbody.velocity = Vector2.zero;
+        _animator.SetBool("isDeath", true);
+        _animator.SetBool("isGlitch", isGlitch);
+    }
     //Метод для смерти жука/глича
     private void Death()
     {
-        Destroy(gameObject);
+        Destroy(this.gameObject);
         _gameController.Enemies_Alive.Remove(this.gameObject);
     }
 
@@ -264,7 +280,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         {
             //Клоп - спаун 3 Клопов(жуков) из позиции глича при клике
             case EnemyType.Crum:
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < glitchModify; i++)
                     _gameController.Spawn(_gameController.Enemies_Prefabs[0], transform.position, Quaternion.identity);
                 break;
 
