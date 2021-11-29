@@ -102,14 +102,31 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     //  Реакция на ЛКМ.
     private void LMBReact()
     {
+<<<<<<< Updated upstream
+=======
+        // Если глич - добавляем стресс(StressFactor * mod_Glitch) и вызываем GlichEffect;
+        if (isGlitch)
+        {
+            _player.StressChange(stressFactor * mod_Glitch);
+            SoundManagerScript.PlaySound("GlitchInit"); 
+            playDeathAnim();           
+            GlichEffect();
+        }
+>>>>>>> Stashed changes
         //Если жук  -засчитываем клики до clickToKill, после убиваем и снижаем стресс(StressFactor * mod_Kill);
         if (!isGlitch)
         {
             currentClics++;
             if (currentClics == clickToKill)
             {
+<<<<<<< Updated upstream
                 Death();
                 _player.StressChange(-stressFactor * mod_Kill); 
+=======
+                _player.StressChange(-stressFactor * mod_Kill);
+                SoundManagerScript.PlaySound("BugDeath");
+                playDeathAnim();              
+>>>>>>> Stashed changes
             }
         }
         //Если глич - добавляем стресс (StressFactor * mod_Glitch) и вызываем GlichEffect;
@@ -127,11 +144,17 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         //Если глич - убиваем и снижаем стресс (StressFactor * mod_Kill);
         if (isGlitch)
         {
+<<<<<<< Updated upstream
             Death();
+=======
+            SoundManagerScript.PlaySound("GlitchDeath");
+            playDeathAnim();          
+>>>>>>> Stashed changes
             _player.StressChange(-stressFactor * mod_Kill);
         }
         //Если жук - добавляем стресс(StressFactor * mod_Fail) за ошибку;
         else
+            SoundManagerScript.PlaySound("BugRmb");
             _player.StressChange(stressFactor * mod_Fail);
     }
 

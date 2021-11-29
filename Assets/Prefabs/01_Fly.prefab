@@ -52,6 +52,12 @@ MonoBehaviour:
   speed: 4.2
   stressFactor: 2
   clickToKill: 1
+<<<<<<< Updated upstream
+=======
+  glitchModify: 2
+  glitchingDuration: 2
+  glitchingCooldown: 5
+>>>>>>> Stashed changes
   mod_Fail: 1.5
   mod_Glitch: 2
   mod_Kill: 1.2
