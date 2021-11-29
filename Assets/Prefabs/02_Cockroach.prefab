@@ -123,6 +123,8 @@ MonoBehaviour:
   stressFactor: 1
   clickToKill: 3
   glitchModify: 0
+  glitchingDuration: 2
+  glitchingCooldown: 5
   mod_Fail: 1.5
   mod_Glitch: 2
   mod_Kill: 1.2
@@ -139,7 +141,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0052610636, y: -0.05392608}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -150,7 +152,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.24, y: 0.52}
+  m_Size: {x: 0.30313295, y: 0.6331132}
   m_EdgeRadius: 0
 --- !u!50 &6307434233750232477
 Rigidbody2D:
