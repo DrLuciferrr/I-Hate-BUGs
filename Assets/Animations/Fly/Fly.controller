@@ -248,7 +248,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isDeath
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isDeath
+    m_ConditionEvent: isGlitch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4070051039045812217}
