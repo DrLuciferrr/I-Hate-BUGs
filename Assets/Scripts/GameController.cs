@@ -56,6 +56,7 @@ public class GameController : MonoBehaviour
         [SerializeField] private float tickModificator;
         
         private float tickValue;
+        [SerializeField] private int ID;
 
     //Создаем новый экземпляр генератора точек для взаимодействия с ним
     RandomPoint randomPoint = new RandomPoint();
@@ -68,7 +69,32 @@ public class GameController : MonoBehaviour
         //Запуск корутины отвечающей за пассивный прирост стресса от кол-ва живых жуков
         StartCoroutine(StressTick());
     }
-    
+
+    private void Start()
+    {
+        BGM(ID);
+    }
+
+    private void BGM(int ID)
+    {
+
+        switch (ID)
+        {
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+        }
+
+    }
     //Корутина пассивно (раз в tickTime секкунд) увеличивающая стресс в зависимости от кол-ва живых жуков
     private IEnumerator StressTick()
     {
