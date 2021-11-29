@@ -1,3 +1,4 @@
+using AllIn1SpriteShader;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,11 @@ using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour, IPointerDownHandler
 {
-    /*Выбор типа противника из выпадающего списка в инспекторе
-     * Crum - Клоп
-     * Fly - Муха
-     * Cockroach - Таракан
-     * Wood_Louse - Мокрица
+    /*Г‚Г»ГЎГ®Г° ГІГЁГЇГ  ГЇГ°Г®ГІГЁГўГ­ГЁГЄГ  ГЁГ§ ГўГ»ГЇГ Г¤Г ГѕГ№ГҐГЈГ® Г±ГЇГЁГ±ГЄГ  Гў ГЁГ­Г±ГЇГҐГЄГІГ®Г°ГҐ
+     * Crum - ГЉГ«Г®ГЇ
+     * Fly - ГЊГіГµГ 
+     * Cockroach - Г’Г Г°Г ГЄГ Г­
+     * Wood_Louse - ГЊГ®ГЄГ°ГЁГ¶Г 
      */
     public enum EnemyType
     {
@@ -19,53 +20,88 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         Wood_Louse
     }
 
-    //Перемена для записи выбора в Enemy Type
-    public EnemyType enemyType;
+    [Header("Г’ГЁГЇ ГўГ°Г ГЈГ  + Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ Г¦ГіГЄ/ГЈГ«ГЁГ·")]
+    //ГЏГҐГ°ГҐГ¬ГҐГ­Г  Г¤Г«Гї Г§Г ГЇГЁГ±ГЁ ГўГ»ГЎГ®Г°Г  Гў Enemy Type
+        public EnemyType enemyType;
     
-    //Определение жук/глич (false/true), Default: false;
-    public bool isGlitch = false;
+    //ГЋГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ Г¦ГіГЄ/ГЈГ«ГЁГ· (false/true), Default: false;
+        public bool isGlitch = false;
 
-    /*Переменные характиристик врага
-     * speed - скорость передвижения (в чем?)
-     * stressFactor - базовое значение начисляемого страсса от жука/глича которое меняется модификаторами
-     * clickToKill -  базовое значение ХП (количество кликов по жуку для убийства)
+    /*ГЏГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ ГµГ Г°Г ГЄГІГЁГ°ГЁГ±ГІГЁГЄ ГўГ°Г ГЈГ 
+     * speed - Г±ГЄГ®Г°Г®Г±ГІГј ГЇГҐГ°ГҐГ¤ГўГЁГ¦ГҐГ­ГЁГї (Гў Г·ГҐГ¬?)
+     * stressFactor - ГЎГ Г§Г®ГўГ®ГҐ Г§Г­Г Г·ГҐГ­ГЁГҐ Г­Г Г·ГЁГ±Г«ГїГҐГ¬Г®ГЈГ® Г±ГІГ°Г Г±Г±Г  Г®ГІ Г¦ГіГЄГ /ГЈГ«ГЁГ·Г  ГЄГ®ГІГ®Г°Г®ГҐ Г¬ГҐГ­ГїГҐГІГ±Гї Г¬Г®Г¤ГЁГґГЁГЄГ ГІГ®Г°Г Г¬ГЁ
+     * clickToKill -  ГЎГ Г§Г®ГўГ®ГҐ Г§Г­Г Г·ГҐГ­ГЁГҐ Г•ГЏ (ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЄГ«ГЁГЄГ®Гў ГЇГ® Г¦ГіГЄГі Г¤Г«Гї ГіГЎГЁГ©Г±ГІГўГ )
      */
-    
-    [SerializeField] private float speed;
-    [SerializeField] private float stressFactor;
-    [SerializeField] private int clickToKill;
+    [Header("Г•Г Г°-ГЄГЁ ГЇГ°Г®ГІГЁГўГ­ГЁГЄГ ")]
+    [Space]
+        [Tooltip("Г‘ГЄГ®Г°Г®Г±ГІГј")]
+        [SerializeField] private float speed;
+                         private float base_speed;
 
-    //Переменная для отслеживания уже сделанных кликов по жуку
+        [Tooltip("Г‘ГІГ°ГҐГ±Г± Г”Г ГЄГІГ®Г°")]
+        [SerializeField] private float stressFactor;
+
+        [Tooltip("Г•ГЏ")]
+        [SerializeField] private float clickToKill;
+                         private float base_clickToKill;
+
+    [Header("Г•Г Г°-ГЄГЁ ГЈГ«ГЁГ·Г ")]
+    [Space]
+        [Tooltip("Г‘ГЁГ«Г  ГЅГґГґГҐГЄГІГ  ГЈГ«ГЁГ·Г (Г­Г ГЇГ°ГЁГ¬ГҐГ° Г¬Г­Г®Г¦ГЁГІГҐГ«Гј Г±ГЄГ®Г°Г®Г±ГІГЁs Гі Г¬ГіГµГЁ)")]
+        [SerializeField] private float glitchModify;
+
+        [Tooltip("Г„Г«ГЁГІГҐГ«ГјГ­Г®Г±ГІГј ГЇГ®Г¤Г±ГўГҐГІГЄГЁ ГЈГ«ГЁГ·Г ")]
+        [SerializeField] private float glitchingDuration;
+
+        [Tooltip("ГЏГ ГіГ§Г  Г¬ГҐГ¦Г¤Гі ГЇГ®Г¤Г±ГўГҐГІГЄГ Г¬ГЁ")]
+        [SerializeField] private float glitchingCooldown;
+
+    //ГЏГҐГ°ГҐГ¬ГҐГ­Г­Г Гї Г¤Г«Гї Г®ГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГї ГіГ¦ГҐ Г±Г¤ГҐГ«Г Г­Г­Г»Гµ ГЄГ«ГЁГЄГ®Гў ГЇГ® Г¦ГіГЄГі
     private int currentClics = 0;
 
-    //Переменная для отслеживания входа в игровую зону
+    //ГЏГҐГ°ГҐГ¬ГҐГ­Г­Г Гї Г¤Г«Гї Г®ГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГї ГўГµГ®Г¤Г  Гў ГЁГЈГ°Г®ГўГіГѕ Г§Г®Г­Гі
     private bool insideGameZone = false;
 
-    //Ссылки на необходимые компоненты(Скрипт игрока, геймконтроллера и генератора точек, физ. тело врага)
+    //Г‘Г±Г»Г«ГЄГЁ Г­Г  Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г»ГҐ ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІГ»(Г‘ГЄГ°ГЁГЇГІ ГЁГЈГ°Г®ГЄГ , ГЈГҐГ©Г¬ГЄГ®Г­ГІГ°Г®Г«Г«ГҐГ°Г  ГЁ ГЈГҐГ­ГҐГ°Г ГІГ®Г°Г  ГІГ®Г·ГҐГЄ, ГґГЁГ§. ГІГҐГ«Г® ГўГ°Г ГЈГ )
     private Player _player;
     private GameController _gameController;
     private RandomPoint _randomPoint;
     private Rigidbody2D _rigidbody;
 
-    /* Модификаторы смены стресса: 
-     * Fail     - при ошибке(ПКМ по жуку);
-     * Glitch   - при срабатывании глича; 
-     * Kill     - при убийсве жука;
+    /* ГЊГ®Г¤ГЁГґГЁГЄГ ГІГ®Г°Г» Г±Г¬ГҐГ­Г» Г±ГІГ°ГҐГ±Г±Г : 
+     * Fail     - ГЇГ°ГЁ Г®ГёГЁГЎГЄГҐ(ГЏГЉГЊ ГЇГ® Г¦ГіГЄГі);
+     * Glitch   - ГЇГ°ГЁ Г±Г°Г ГЎГ ГІГ»ГўГ Г­ГЁГЁ ГЈГ«ГЁГ·Г ; 
+     * Kill     - ГЇГ°ГЁ ГіГЎГЁГ©Г±ГўГҐ Г¦ГіГЄГ ;
      */
-    [SerializeField]
-    private float
-        mod_Fail,
-        mod_Glitch,
-        mod_Kill;
-    //PS. сделать константными с конкремными значениями 
+
+    [Header("ГЊГ®Г¤ГЁГґГЁГЄГ ГІГ®Г°Г» Г±Г®ГЎГ»ГІГЁГ©")]
+    [Space]
+
+    [Tooltip("ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ ГўГ»ГїГўГ«ГҐГ­ГЁГЁ ГЈГ«ГЁГ·Г ")]
+    [SerializeField] private float mod_Fail;
+
+    [Tooltip("Г‘Г°Г ГЎГ ГІГ»ГўГ Г­ГЁГҐ ГЅГґГґГҐГЄГІГ  ГЈГ«ГЁГ·Г ")]
+    [SerializeField] private float mod_Glitch;
+
+    [Tooltip("Г“ГЎГЁГ©Г±ГІГўГ® Г¦ГіГЄГ /ГЈГ«ГЁГ·Г ")]
+    [SerializeField] private float mod_Kill;
+    //PS. Г±Г¤ГҐГ«Г ГІГј ГЄГ®Г­Г±ГІГ Г­ГІГ­Г»Г¬ГЁ Г± ГЄГ®Г­ГЄГ°ГҐГ¬Г­Г»Г¬ГЁ Г§Г­Г Г·ГҐГ­ГЁГїГ¬ГЁ 
 
     private Vector3 targetPoint;
     Vector3 direction;
     float rotationAngle;
+
+
+    Animator _animator;
     private void Awake()
     {
-        //Получение нужных компонентов
+        //Г‡Г ГЇГ®Г¬ГЁГ­Г Г­ГЁГҐ ГЎГ Г§Г®ГўГ®Г© Г±ГЄГ®Г°Г®Г±ГІГЁ ГЁ Г•ГЏ
+        base_speed = speed;
+        base_clickToKill = clickToKill;
+
+        //ГЏГ®Г«ГіГ·ГҐГ­ГЁГҐ Г­ГіГ¦Г­Г»Гµ ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІГ®Гў
         _rigidbody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
         _player = FindObjectOfType<Player>();
         _gameController = FindObjectOfType<GameController>();
         _randomPoint = new RandomPoint();
@@ -73,38 +109,38 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
 
     private void Start()
     {
+        
         FindNextTargetPoint();
         transform.Rotate(Vector3.forward, rotationAngle);
         _rigidbody.velocity = this.transform.up * speed;
 
         StartCoroutine(MovePattern());
+        if (isGlitch)
+            StartCoroutine(Glitching());
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-
     }
-    //Метод отслеживания нажатия ПКМ или ЛКМ по врагу
+    //ГЊГҐГІГ®Г¤ Г®ГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГї Г­Г Г¦Г ГІГЁГї ГЏГЉГЊ ГЁГ«ГЁ Г‹ГЉГЊ ГЇГ® ГўГ°Г ГЈГі
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (insideGameZone)
+        if (insideGameZone && currentClics < clickToKill)
         {
-            //Отслеживание ЛКМ
+            //ГЋГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГҐ Г‹ГЉГЊ
             if (eventData.button == PointerEventData.InputButton.Left)
                 LMBReact();
 
-            //Отслеживание ПКМ
+            //ГЋГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГҐ ГЏГЉГЊ
             if (eventData.button == PointerEventData.InputButton.Right)
                 RMBReact();
         }
     }
 
-    //  Реакция на ЛКМ.
+    //  ГђГҐГ ГЄГ¶ГЁГї Г­Г  Г‹ГЉГЊ.
     private void LMBReact()
     {
-<<<<<<< Updated upstream
-=======
-        // Если глич - добавляем стресс(StressFactor * mod_Glitch) и вызываем GlichEffect;
+        // Г…Г±Г«ГЁ ГЈГ«ГЁГ· - Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Г±ГІГ°ГҐГ±Г±(StressFactor * mod_Glitch) ГЁ ГўГ»Г§Г»ГўГ ГҐГ¬ GlichEffect;
         if (isGlitch)
         {
             _player.StressChange(stressFactor * mod_Glitch);
@@ -112,63 +148,40 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             playDeathAnim();           
             GlichEffect();
         }
->>>>>>> Stashed changes
-        //Если жук  -засчитываем клики до clickToKill, после убиваем и снижаем стресс(StressFactor * mod_Kill);
-        if (!isGlitch)
+
+        //Г…Г±Г«ГЁ Г¦ГіГЄ  -Г§Г Г±Г·ГЁГІГ»ГўГ ГҐГ¬ ГЄГ«ГЁГЄГЁ Г¤Г® clickToKill, ГЇГ®Г±Г«ГҐ ГіГЎГЁГўГ ГҐГ¬ ГЁ Г±Г­ГЁГ¦Г ГҐГ¬ Г±ГІГ°ГҐГ±Г±(StressFactor * mod_Kill);
+        else
         {
             currentClics++;
             if (currentClics == clickToKill)
             {
-<<<<<<< Updated upstream
-                Death();
-                _player.StressChange(-stressFactor * mod_Kill); 
-=======
                 _player.StressChange(-stressFactor * mod_Kill);
                 SoundManagerScript.PlaySound("BugDeath");
                 playDeathAnim();              
->>>>>>> Stashed changes
             }
-        }
-        //Если глич - добавляем стресс (StressFactor * mod_Glitch) и вызываем GlichEffect;
-        else
-        {
-            _player.StressChange(stressFactor * mod_Glitch);
-            _gameController.GlitchStart(this);
-            Death();
         }    
     }
 
-    // Реакция на ПКМ.
+    // ГђГҐГ ГЄГ¶ГЁГї Г­Г  ГЏГЉГЊ.
     private void RMBReact()
     {
-        //Если глич - убиваем и снижаем стресс (StressFactor * mod_Kill);
+        //Г…Г±Г«ГЁ ГЈГ«ГЁГ· - ГіГЎГЁГўГ ГҐГ¬ ГЁ Г±Г­ГЁГ¦Г ГҐГ¬ Г±ГІГ°ГҐГ±Г± (StressFactor * mod_Kill);
         if (isGlitch)
         {
-<<<<<<< Updated upstream
-            Death();
-=======
             SoundManagerScript.PlaySound("GlitchDeath");
             playDeathAnim();          
->>>>>>> Stashed changes
             _player.StressChange(-stressFactor * mod_Kill);
         }
-        //Если жук - добавляем стресс(StressFactor * mod_Fail) за ошибку;
+        //Г…Г±Г«ГЁ Г¦ГіГЄ - Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Г±ГІГ°ГҐГ±Г±(StressFactor * mod_Fail) Г§Г  Г®ГёГЁГЎГЄГі;
         else
             SoundManagerScript.PlaySound("BugRmb");
             _player.StressChange(stressFactor * mod_Fail);
     }
 
-    //Метод для смерти жука/глича
-    private void Death()
-    {
-        Destroy(gameObject);
-        _gameController.Enemies_Alive.Remove(this.gameObject);
-    }
-
-    /*  Реакция на вход в игровую зону.
-     *  Если жук  - добавляем StressFactor;
-     *  Если глич - ничего;
-     *  Вне зависимости жук/баг включаем insideGameZone для отслеживания позиции на сцене;
+    /*  ГђГҐГ ГЄГ¶ГЁГї Г­Г  ГўГµГ®Г¤ Гў ГЁГЈГ°Г®ГўГіГѕ Г§Г®Г­Гі.
+     *  Г…Г±Г«ГЁ Г¦ГіГЄ  - Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ StressFactor;
+     *  Г…Г±Г«ГЁ ГЈГ«ГЁГ· - Г­ГЁГ·ГҐГЈГ®;
+     *  Г‚Г­ГҐ Г§Г ГўГЁГ±ГЁГ¬Г®Г±ГІГЁ Г¦ГіГЄ/ГЎГ ГЈ ГўГЄГ«ГѕГ·Г ГҐГ¬ insideGameZone Г¤Г«Гї Г®ГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГї ГЇГ®Г§ГЁГ¶ГЁГЁ Г­Г  Г±Г¶ГҐГ­ГҐ;
      */
     private void OnTriggerEnter2D(Collider2D trigger)
     {
@@ -180,12 +193,8 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 _player.StressChange(stressFactor);
         }
     }
-    private void OnTriggerExit2D(Collider2D trigger)
-    {
-        //StopCoroutine("Move");
-        //StartCoroutine(Move(_randomPoint.InGameZone()));
-    }
 
+    //ГЊГҐГІГ®Г¤ Г¤Г«Гї ГЇГ®ГЁГ±ГЄГ  ГІГ®Г·ГЄГЁ ГЇГіГІГЁ
     private Vector3 FindNextTargetPoint()
     {
         do
@@ -198,8 +207,29 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         return targetPoint;
     }
 
-    //Следующие 2 метода (MovePattern и GlitchEffect) будут уникальны для каждого противника, потому вынесены в самый низ, отдельно
-    //Метод для передвижения, чтоб легче было связать передвижение с анимацией
+    private IEnumerator Glitching()
+    {
+        yield return new WaitForSecondsRealtime(glitchingCooldown);
+        _animator.SetFloat("Glitching", 1);
+        yield return new WaitForSecondsRealtime(glitchingDuration);
+        _animator.SetFloat("Glitching", 0);
+        StartCoroutine(Glitching());
+    }    
+    private void playDeathAnim()
+    {
+        _rigidbody.velocity = Vector2.zero;
+        _animator.SetBool("isDeath", true);
+        _animator.SetBool("isGlitch", isGlitch);
+    }
+    //ГЊГҐГІГ®Г¤ Г¤Г«Гї Г±Г¬ГҐГ°ГІГЁ Г¦ГіГЄГ /ГЈГ«ГЁГ·Г 
+    private void Death()
+    {
+        Destroy(this.gameObject);
+        _gameController.Enemies_Alive.Remove(this.gameObject);
+    }
+
+    //Г‘Г«ГҐГ¤ГіГѕГ№ГЁГҐ 2 Г¬ГҐГІГ®Г¤Г  (MovePattern ГЁ GlitchEffect) ГЎГіГ¤ГіГІ ГіГ­ГЁГЄГ Г«ГјГ­Г» Г¤Г«Гї ГЄГ Г¦Г¤Г®ГЈГ® ГЇГ°Г®ГІГЁГўГ­ГЁГЄГ , ГЇГ®ГІГ®Г¬Гі ГўГ»Г­ГҐГ±ГҐГ­Г» Гў Г±Г Г¬Г»Г© Г­ГЁГ§, Г®ГІГ¤ГҐГ«ГјГ­Г®
+    //ГЊГҐГІГ®Г¤ Г¤Г«Гї ГЇГҐГ°ГҐГ¤ГўГЁГ¦ГҐГ­ГЁГї, Г·ГІГ®ГЎ Г«ГҐГЈГ·ГҐ ГЎГ»Г«Г® Г±ГўГїГ§Г ГІГј ГЇГҐГ°ГҐГ¤ГўГЁГ¦ГҐГ­ГЁГҐ Г± Г Г­ГЁГ¬Г Г¶ГЁГҐГ©
 
     private IEnumerator MovePattern()
     {
@@ -215,7 +245,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 break;
 
             case EnemyType.Fly:
-                //Затычка
+                //Г‡Г ГІГ»Г·ГЄГ 
                 yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
                 _rigidbody.velocity = Vector3.zero;
                 FindNextTargetPoint();
@@ -225,57 +255,61 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 break;
 
             case EnemyType.Wood_Louse:
+                //Г‡Г ГІГ»Г·ГЄГ 
+                yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
+                _rigidbody.velocity = Vector3.zero;
+                FindNextTargetPoint();
+                yield return new WaitForSecondsRealtime(1.5f);
+                transform.Rotate(Vector3.forward, rotationAngle);
+                _rigidbody.velocity = this.transform.up * speed;
                 break;
 
             case EnemyType.Cockroach:
+                //Г‡Г ГІГ»Г·ГЄГ 
+                yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
+                _rigidbody.velocity = Vector3.zero;
+                FindNextTargetPoint();
+                yield return new WaitForSecondsRealtime(1.5f);
+                transform.Rotate(Vector3.forward, rotationAngle);
+                _rigidbody.velocity = this.transform.up * speed;
                 break;
 
         }
         StartCoroutine(MovePattern());
     }
 
-    //Эффект срабатывания глича
-    public IEnumerator GlichEffect()
+    //ГќГґГґГҐГЄГІ Г±Г°Г ГЎГ ГІГ»ГўГ Г­ГЁГї ГЈГ«ГЁГ·Г 
+    public void GlichEffect()
     {
         switch (enemyType)
         {
-            //Клоп - спаун 3 Клопов(жуков) из позиции глича при клике
+            //ГЉГ«Г®ГЇ - Г±ГЇГ ГіГ­ 3 ГЉГ«Г®ГЇГ®Гў(Г¦ГіГЄГ®Гў) ГЁГ§ ГЇГ®Г§ГЁГ¶ГЁГЁ ГЈГ«ГЁГ·Г  ГЇГ°ГЁ ГЄГ«ГЁГЄГҐ
             case EnemyType.Crum:
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < glitchModify; i++)
                     _gameController.Spawn(_gameController.Enemies_Prefabs[0], transform.position, Quaternion.identity);
-                yield break;
-
-            //Муха - ускорение в 1.5 раза (speed*1.5) всех живых противников на сцене на 5 секкунд.
-            //В случае если глич активируется повторно в течении действия эффекта - длительность обновляется
-            case EnemyType.Fly:
-
-
-                List<GameObject> Affected_Enemies = new List<GameObject>();
-                foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
-                    Affected_Enemies.Add(livingEnemy);
-
-                foreach (GameObject affectedEnemy in Affected_Enemies)
-                    affectedEnemy.GetComponent<Enemy>().speed = affectedEnemy.GetComponent<Enemy>().speed * 1.5f;
-                Debug.Log("SPEED UP");
-                yield return new WaitForSecondsRealtime(5);
-
-                /*
-                foreach (GameObject affectedEnemy in Affected_Enemies)
-                {
-                    if (affectedEnemy != null)
-                        affectedEnemy.GetComponent<Enemy>().speed = affectedEnemy.GetComponent<Enemy>().speed / 1.5f;
-                        
-                    else
-                        continue;
-                }
-                */
-                Debug.Log("SPEED DOWN");
-                yield break;                
-
-            case EnemyType.Wood_Louse:
                 break;
 
+            //ГЊГіГµГ  - ГіГ±ГЄГ®Г°ГҐГ­ГЁГҐ (speed*glitchModify) ГўГ±ГҐГµ Г¦ГЁГўГ»Гµ ГЇГ°Г®ГІГЁГўГ­ГЁГЄГ®Гў Г­Г  Г±Г¶ГҐГ­ГҐ ГЄГ®ГІГ®Г°Г»ГҐ Г­ГҐ ГЎГ»Г«ГЁ ГіГ±ГЄГ®Г°ГҐГ­Г» Г°Г Г­ГҐГҐ
+            case EnemyType.Fly:
+                foreach (GameObject livingEnemy in _gameController.Enemies_Alive) 
+                {
+                    if (livingEnemy.GetComponent<Enemy>().speed == livingEnemy.GetComponent<Enemy>().base_speed)
+                        livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;              
+                }
+                break;
+
+            //Г’Г Г°Г ГЄГ Г­ - ГЋГЎГ«Г Г±ГІГј ГўГ®ГЄГ°ГіГЈ ГЈГ«ГЁГ·Г  Г§Г ГІГҐГ¬Г­ГїГҐГІГ±Гї Г­Г  (glitchDuration) Г±ГҐГЄГЄГіГ­Г¤
             case EnemyType.Cockroach:
+                break;
+                
+            //ГЊГ®ГЄГ°ГЁГ¶Г  - ГіГўГҐГ«ГЁГ·ГҐГ­ГЁГҐ Г•ГЏ (clickToKill*glitchModify) ГўГ±ГҐГµ Г¦ГЁГўГ»Гµ ГЇГ°Г®ГІГЁГўГ­ГЁГЄГ®Гў Г­Г  Г±Г¶ГҐГ­ГҐ ГЄГ®ГІГ®Г°Г»ГҐ Г­ГҐ ГЎГ»Г«ГЁ ГіГ±ГЁГ«ГҐГ­Г» Г°Г Г­ГҐГҐ
+
+            case EnemyType.Wood_Louse:
+                foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
+                {
+                    if (livingEnemy.GetComponent<Enemy>().clickToKill == livingEnemy.GetComponent<Enemy>().base_clickToKill)
+                        livingEnemy.GetComponent<Enemy>().clickToKill = livingEnemy.GetComponent<Enemy>().clickToKill * glitchModify;
+                }
                 break;
         }
     }
