@@ -97,7 +97,7 @@ public class GameController : MonoBehaviour
         }
 
     }*/
-    // орутина пассивно (раз в tickTime секкунд) увеличивающа€ стресс в зависимости от кол-ва живых жуков
+    // орутина пассивно (раз в tickTime секкунд) увеличивающа€ стресс в зависимости от кол-ва живых жуков, или уменьшает если жуков нету на сцене
     private IEnumerator StressTick()
     {
         if (Enemies_Alive.Count > 0)
@@ -106,6 +106,12 @@ public class GameController : MonoBehaviour
                 tickValue = tickModificator;
             else
                 tickValue = Mathf.Log(Enemies_Alive.Count) * tickModificator;
+            _player.StressChange(tickValue);
+        }
+        if (Enemies_Alive.Count == 0)
+        {
+
+            tickValue = -1*tickModificator;
             _player.StressChange(tickValue);
         }
         yield return new WaitForSecondsRealtime(tickTime);
