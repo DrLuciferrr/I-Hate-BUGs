@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fly_Glitching
+  m_Name: Fly_HP_UP
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -22,17 +22,17 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 20
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 136
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material._GlitchAmount
+    attribute: material._OutlineAlpha
     path: 
     classID: 212
     script: {fileID: 0}
@@ -74,7 +74,7 @@ AnimationClip:
       isPPtrCurve: 1
     - serializedVersion: 2
       path: 0
-      attribute: 2180264488
+      attribute: 2196690454
       script: {fileID: 0}
       typeID: 212
       customType: 22
@@ -114,17 +114,17 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 20
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 136
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: material._GlitchAmount
+    attribute: material._OutlineAlpha
     path: 
     classID: 212
     script: {fileID: 0}
