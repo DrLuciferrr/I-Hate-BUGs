@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  isGlitch: 1
+  isGlitch: 0
   speed: 0.7
   stressFactor: 0.25
   clickToKill: 1
