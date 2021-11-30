@@ -106,7 +106,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: b3a7cbb69ed6b5b4e8d5c4537bd9613f, type: 2}
     m_Threshold: 0
-    m_Position: {x: 0.06, y: 0.002}
+    m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Glitching
@@ -114,7 +114,15 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 8a4fe89ac93db244d8264dadc8f7af8a, type: 2}
     m_Threshold: 1
-    m_Position: {x: -0.002, y: 0.133}
+    m_Position: {x: 1, y: -0.01}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Glitching
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: d5782626f3aecdc4392c1536cb3195ee, type: 2}
+    m_Threshold: 2
+    m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Glitching
@@ -122,10 +130,10 @@ BlendTree:
   m_BlendParameter: Glitching
   m_BlendParameterY: Buffed
   m_MinThreshold: 0
-  m_MaxThreshold: 1
+  m_MaxThreshold: 2
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 1
 --- !u!1107 &-797021868995801976
 AnimatorStateMachine:
   serializedVersion: 6

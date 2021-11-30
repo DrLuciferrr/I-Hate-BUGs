@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8261847239697393283}
+  - component: {fileID: 5855967472568494610}
   - component: {fileID: 6637856661188729183}
   - component: {fileID: 8869416130939894512}
-  - component: {fileID: 5855967472568494610}
   - component: {fileID: 1663849882712199864}
   - component: {fileID: 6307434233750232477}
   - component: {fileID: 4634720685419240316}
@@ -36,6 +36,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5855967472568494610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7256530894989448154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac4c6b8fec1fd24ebcf4613bef931fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 2
+  isGlitch: 0
+  speed: 2.1
+  stressFactor: 1
+  clickToKill: 3
+  glitchModify: 0
+  glitchingDuration: 2
+  glitchingCooldown: 5
+  mod_Fail: 1.5
+  mod_Glitch: 2
+  mod_Kill: 1.2
 --- !u!212 &6637856661188729183
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -106,29 +129,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5855967472568494610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7256530894989448154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac4c6b8fec1fd24ebcf4613bef931fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyType: 2
-  isGlitch: 0
-  speed: 2.1
-  stressFactor: 1
-  clickToKill: 3
-  glitchModify: 0
-  glitchingDuration: 2
-  glitchingCooldown: 5
-  mod_Fail: 1.5
-  mod_Glitch: 2
-  mod_Kill: 1.2
 --- !u!61 &1663849882712199864
 BoxCollider2D:
   m_ObjectHideFlags: 0

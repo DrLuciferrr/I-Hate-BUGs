@@ -91,7 +91,6 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     Vector3 direction;
     float rotationAngle;
 
-
     Animator _animator;
     private void Awake()
     {
@@ -105,6 +104,8 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         _player = FindObjectOfType<Player>();
         _gameController = FindObjectOfType<GameController>();
         _randomPoint = new RandomPoint();
+
+       
     }
 
     private void Start()
@@ -210,7 +211,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     private IEnumerator Glitching()
     {
         yield return new WaitForSecondsRealtime(glitchingCooldown);
-        _animator.SetFloat("Glitching", 1);
+        _animator.SetFloat("Glitching", 0.7f);
         yield return new WaitForSecondsRealtime(glitchingDuration);
         _animator.SetFloat("Glitching", 0);
         StartCoroutine(Glitching());
@@ -293,8 +294,10 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             case EnemyType.Fly:
                 foreach (GameObject livingEnemy in _gameController.Enemies_Alive) 
                 {
-                    if (livingEnemy.GetComponent<Enemy>().speed == livingEnemy.GetComponent<Enemy>().base_speed)
-                        livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;              
+                    if (livingEnemy.GetComponent<Enemy>().speed == livingEnemy.GetComponent<Enemy>().base_speed) 
+                    { 
+                        livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;
+                    }
                 }
                 break;
 
@@ -308,7 +311,10 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
                 {
                     if (livingEnemy.GetComponent<Enemy>().clickToKill == livingEnemy.GetComponent<Enemy>().base_clickToKill)
+                    {
                         livingEnemy.GetComponent<Enemy>().clickToKill = livingEnemy.GetComponent<Enemy>().clickToKill * glitchModify;
+                        livingEnemy.GetComponent<Animator>().SetFloat("Buffed", 0.5f);
+                    }
                 }
                 break;
         }

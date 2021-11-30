@@ -1582,8 +1582,7 @@ MonoBehaviour:
   - {fileID: 0}
   Enemies_Alive: []
   WaveList:
-    Waves:
-    - EnemyInWave: 0000000001000000
+    Waves: []
   spawnDelay: 0.5
   waveDelay: 5
   tickTime: 2
