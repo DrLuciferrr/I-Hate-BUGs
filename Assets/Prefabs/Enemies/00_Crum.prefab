@@ -55,10 +55,10 @@ MonoBehaviour:
   clickToKill: 1
   glitchModify: 3
   glitchingDuration: 2
-  glitchingCooldown: 5
-  mod_Fail: 1.5
+  glitchingCooldown: 2
+  mod_Fail: 1.2
   mod_Glitch: 2
-  mod_Kill: 1.2
+  mod_Kill: 1.5
 --- !u!212 &-2068809597632542890
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -129,29 +129,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2500772835160696960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2500772835160696971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac4c6b8fec1fd24ebcf4613bef931fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyType: 0
-  isGlitch: 0
-  speed: 0.7
-  stressFactor: 0.25
-  clickToKill: 1
-  glitchModify: 3
-  glitchingDuration: 2
-  glitchingCooldown: 2
-  mod_Fail: 1.2
-  mod_Glitch: 2
-  mod_Kill: 1.5
 --- !u!61 &2963208347073316183
 BoxCollider2D:
   m_ObjectHideFlags: 0
