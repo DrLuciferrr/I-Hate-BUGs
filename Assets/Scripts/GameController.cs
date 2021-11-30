@@ -70,7 +70,7 @@ public class GameController : MonoBehaviour
         StartCoroutine(StressTick());
     }
 
-    private void Start()
+    /*private void Start()
     {
         BGM(ID);
     }
@@ -80,21 +80,23 @@ public class GameController : MonoBehaviour
 
         switch (ID)
         {
+            case 0:
+                break;
             case 1:
-
+                SoundManagerScript.PlaySound("Level_1");
                 break;
             case 2:
-
+                SoundManagerScript.PlaySound("Level_2");
                 break;
             case 3:
-
+                SoundManagerScript.PlaySound("Level_3");
                 break;
             case 4:
-
+                SoundManagerScript.PlaySound("Level_4");
                 break;
         }
 
-    }
+    }*/
     // орутина пассивно (раз в tickTime секкунд) увеличивающа€ стресс в зависимости от кол-ва живых жуков
     private IEnumerator StressTick()
     {
