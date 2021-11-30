@@ -125,10 +125,10 @@ MonoBehaviour:
   clickToKill: 1
   glitchModify: 3
   glitchingDuration: 2
-  glitchingCooldown: 5
-  mod_Fail: 1.5
+  glitchingCooldown: 2
+  mod_Fail: 1.2
   mod_Glitch: 2
-  mod_Kill: 1.2
+  mod_Kill: 1.5
 --- !u!61 &2963208347073316183
 BoxCollider2D:
   m_ObjectHideFlags: 0

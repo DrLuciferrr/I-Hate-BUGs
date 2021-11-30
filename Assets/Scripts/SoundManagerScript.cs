@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManagerScript : MonoBehaviour
 {
-    public static AudioClip bugDeathSound, bugRmbSound, glitchDeathSound, glitchInitSound, chocolateSound, coffeeSound, autoTestSound, levelFinishSound, gameOverSound, level1Sound, level2Sound, level3Sound, level4Sound, menuSound, titleSound;
+    public static AudioClip bugDeathSound, bugRmbSound, glitchDeathSound, glitchInitSound, clickReactionSound, chocolateSound, coffeeSound, autoTestSound, levelFinishSound, gameOverSound, level1Sound, level2Sound, level3Sound, level4Sound, menuSound, titleSound;
     static AudioSource audioSrc;
 
     // Start is called before the first frame update
@@ -14,6 +14,7 @@ public class SoundManagerScript : MonoBehaviour
         bugRmbSound = Resources.Load<AudioClip>("SFX_BugRmb");
         glitchDeathSound = Resources.Load<AudioClip>("SFX_GlitchDeath");
         glitchInitSound = Resources.Load<AudioClip>("SFX_GlitchInit");
+        clickReactionSound = Resources.Load<AudioClip>("SFX_ClickReaction");
         chocolateSound = Resources.Load<AudioClip>("SFX_UseChocolate");
         coffeeSound = Resources.Load<AudioClip>("SFX_UseCoffee");
         autoTestSound = Resources.Load<AudioClip>("SFX_UseAutoTest");
@@ -50,7 +51,10 @@ public class SoundManagerScript : MonoBehaviour
                 break;
             case "GlitchInit":
                 audioSrc.PlayOneShot(glitchInitSound);
-                break;         
+                break;
+            case "ClickReaction":
+                audioSrc.PlayOneShot(clickReactionSound);
+                break;
             case "UseChocolate":
                 audioSrc.PlayOneShot(chocolateSound);
                 break;

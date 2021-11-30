@@ -153,6 +153,10 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         else
         {
             currentClics++;
+            if (currentClics != clickToKill)
+            {
+                SoundManagerScript.PlaySound("ClickReaction");
+            }
             if (currentClics == clickToKill)
             {
                 _player.StressChange(-stressFactor * mod_Kill);
