@@ -108,7 +108,7 @@ public class GameController : MonoBehaviour
                 tickValue = Mathf.Log(Enemies_Alive.Count) * tickModificator;
             _player.StressChange(tickValue);
         }
-        yield return new WaitForSecondsRealtime(tickTime);
+        yield return new WaitForSeconds(tickTime);
         Debug.Log("TICK " + tickValue);
         StartCoroutine("StressTick");
     }
@@ -167,9 +167,9 @@ public class GameController : MonoBehaviour
                         lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
                         break;
                 }
-                yield return new WaitForSecondsRealtime(spawnDelay);
+                yield return new WaitForSeconds(spawnDelay);
             }
-            yield return new WaitForSecondsRealtime(waveDelay);
+            yield return new WaitForSeconds(waveDelay);
             currentWave++;
         }
         

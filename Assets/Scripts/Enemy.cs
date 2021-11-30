@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         [SerializeField] private float glitchingDuration;
 
         [Tooltip("Ïàóçà ìåæäó ïîäñâåòêàìè")]
-        [SerializeField] private float glitchingCooldown;
+        public float glitchingCooldown;
 
     //Ïåðåìåííàÿ äëÿ îòñëåæèâàíèÿ óæå ñäåëàííûõ êëèêîâ ïî æóêó
     private int currentClics = 0;
@@ -210,9 +210,9 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
 
     private IEnumerator Glitching()
     {
-        yield return new WaitForSecondsRealtime(glitchingCooldown);
+        yield return new WaitForSeconds(glitchingCooldown);
         _animator.SetFloat("Glitching", 0.7f);
-        yield return new WaitForSecondsRealtime(glitchingDuration);
+        yield return new WaitForSeconds(glitchingDuration);
         _animator.SetFloat("Glitching", 0);
         StartCoroutine(Glitching());
     }    
@@ -240,7 +240,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
                 _rigidbody.velocity = Vector3.zero;
                 FindNextTargetPoint();
-                yield return new WaitForSecondsRealtime(1.5f);
+                yield return new WaitForSeconds(1.5f);
                 transform.Rotate(Vector3.forward, rotationAngle);
                 _rigidbody.velocity = this.transform.up * speed;
                 break;
@@ -250,7 +250,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
                 _rigidbody.velocity = Vector3.zero;
                 FindNextTargetPoint();
-                yield return new WaitForSecondsRealtime(1.5f);
+                yield return new WaitForSeconds(1.5f);
                 transform.Rotate(Vector3.forward, rotationAngle);
                 _rigidbody.velocity = this.transform.up * speed;
                 break;
@@ -260,7 +260,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
                 _rigidbody.velocity = Vector3.zero;
                 FindNextTargetPoint();
-                yield return new WaitForSecondsRealtime(1.5f);
+                yield return new WaitForSeconds(1.5f);
                 transform.Rotate(Vector3.forward, rotationAngle);
                 _rigidbody.velocity = this.transform.up * speed;
                 break;
@@ -270,7 +270,7 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
                 yield return new WaitUntil(() => Vector3.Distance(this.transform.position, targetPoint) <= 0.5f);
                 _rigidbody.velocity = Vector3.zero;
                 FindNextTargetPoint();
-                yield return new WaitForSecondsRealtime(1.5f);
+                yield return new WaitForSeconds(1.5f);
                 transform.Rotate(Vector3.forward, rotationAngle);
                 _rigidbody.velocity = this.transform.up * speed;
                 break;
