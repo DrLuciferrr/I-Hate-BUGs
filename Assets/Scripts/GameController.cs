@@ -173,9 +173,9 @@ public class GameController : MonoBehaviour
                         lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
                         break;
                 }
-                yield return new WaitForSecondsRealtime(spawnDelay);
+                yield return new WaitForSeconds(spawnDelay);
             }
-            yield return new WaitForSecondsRealtime(waveDelay);
+            yield return new WaitForSeconds(waveDelay);
             currentWave++;
         }
         

@@ -6,22 +6,60 @@ using UnityEngine.EventSystems;
 
 public class Sedative : MonoBehaviour
 {
+    public SedativeType type;
+
     [SerializeField] private Player _player;
+    [SerializeField] private GameController _gameController;
+    [SerializeField] private Text _text;
 
+    public int count;
     [SerializeField] private float stressAffect;
+    [SerializeField] private int duration;
 
-    private Button _button;
-    private Text _text;
-    private void Awake()
+    
+
+    public enum SedativeType
     {
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(Click);
-
-        _text = GetComponentInChildren<Text>();
+        Chocolate_Bar,
+        Tea,
+        Auto_Fix
     }
 
-    void Click()
+    private void Awake()
     {
-        _player.StressChange(-stressAffect);
+        _text.text = count.ToString();
+    }
+    private IEnumerator SedativeEffect()
+    {
+
+        switch (type)
+        {
+            case SedativeType.Chocolate_Bar:
+                _player.StressChange(-stressAffect);
+                yield break;
+
+            case SedativeType.Tea:
+                for (int i = 0; i <= duration; i++)
+                {
+                    _player.StressChange(-stressAffect);
+                    yield return new WaitForSeconds(1);
+                }
+                yield break;
+
+            case SedativeType.Auto_Fix:
+                yield break;
+        }
+    }
+
+    private void OnMouseDown()
+    {
+        if (count > 0) 
+        {
+            StartCoroutine(SedativeEffect());
+            count--;
+            _text.text = count.ToString();
+        }
+        if (count == 0)
+            Destroy(this.gameObject);
     }
 }

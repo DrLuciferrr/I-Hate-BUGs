@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2500772835160696975}
+  - component: {fileID: 2500772835160696960}
   - component: {fileID: -2068809597632542890}
   - component: {fileID: 3052766252239415696}
-  - component: {fileID: 2500772835160696960}
   - component: {fileID: 2963208347073316183}
   - component: {fileID: -1526220502764386683}
   - component: {fileID: 6940855513518053938}
@@ -36,6 +36,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2500772835160696960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2500772835160696971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac4c6b8fec1fd24ebcf4613bef931fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  isGlitch: 0
+  speed: 0.7
+  stressFactor: 0.25
+  clickToKill: 1
+  glitchModify: 3
+  glitchingDuration: 2
+  glitchingCooldown: 5
+  mod_Fail: 1.5
+  mod_Glitch: 2
+  mod_Kill: 1.2
 --- !u!212 &-2068809597632542890
 SpriteRenderer:
   m_ObjectHideFlags: 0
