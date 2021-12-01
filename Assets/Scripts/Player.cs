@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
     //Метод изменения стресса(как вверх так и вниз) + отображение результата в StressMether
     public void StressChange(float stressFactor) 
     {
-        
         stress += stressFactor;
         if (stress < 0)
             stress = 0;

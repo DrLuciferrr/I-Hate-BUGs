@@ -1,6 +1,4 @@
-using AllIn1SpriteShader;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -53,8 +51,12 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
         [Tooltip("Äëèòåëüíîñòü ïîäñâåòêè ãëè÷à")]
         [SerializeField] private float glitchingDuration;
 
+    
+
         [Tooltip("Ïàóçà ìåæäó ïîäñâåòêàìè")]
         public float glitchingCooldown;
+
+    [SerializeField] private GameObject cockroachGlitchEffect;
 
     //Ïåðåìåííàÿ äëÿ îòñëåæèâàíèÿ óæå ñäåëàííûõ êëèêîâ ïî æóêó
     private int currentClics = 0;
@@ -65,8 +67,9 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     //Ññûëêè íà íåîáõîäèìûå êîìïîíåíòû(Ñêðèïò èãðîêà, ãåéìêîíòðîëëåðà è ãåíåðàòîðà òî÷åê, ôèç. òåëî âðàãà)
     private Player _player;
     private GameController _gameController;
-    private RandomPoint _randomPoint;
     private Rigidbody2D _rigidbody;
+    private Animator _animator;
+    private RandomPoint _randomPoint;
 
     /* Ìîäèôèêàòîðû ñìåíû ñòðåññà: 
      * Fail     - ïðè îøèáêå(ÏÊÌ ïî æóêó);
@@ -91,21 +94,21 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
     Vector3 direction;
     float rotationAngle;
 
-    Animator _animator;
+    
     private void Awake()
     {
-        //Çàïîìèíàíèå áàçîâîé ñêîðîñòè è ÕÏ
-        base_speed = speed;
-        base_clickToKill = clickToKill;
-
         //Ïîëó÷åíèå íóæíûõ êîìïîíåíòîâ
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
         _player = FindObjectOfType<Player>();
         _gameController = FindObjectOfType<GameController>();
+
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+
         _randomPoint = new RandomPoint();
 
-       
+        //Çàïîìèíàíèå áàçîâîé ñêîðîñòè è ÕÏ
+        base_speed = speed;
+        base_clickToKill = clickToKill; 
     }
 
     private void Start()
@@ -298,15 +301,20 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             case EnemyType.Fly:
                 foreach (GameObject livingEnemy in _gameController.Enemies_Alive) 
                 {
-                    if (livingEnemy.GetComponent<Enemy>().speed == livingEnemy.GetComponent<Enemy>().base_speed) 
-                    { 
-                        livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;
+                    if (livingEnemy.GetComponent<Enemy>() != null) 
+                    {
+                        if (livingEnemy.GetComponent<Enemy>().speed == livingEnemy.GetComponent<Enemy>().base_speed)
+                        {
+                            livingEnemy.GetComponent<Enemy>().speed = livingEnemy.GetComponent<Enemy>().speed * glitchModify;
+                        }
                     }
+                    
                 }
                 break;
 
             //Òàðàêàí - Îáëàñòü âîêðóã ãëè÷à çàòåìíÿåòñÿ íà (glitchDuration) ñåêêóíä
             case EnemyType.Cockroach:
+                Instantiate(cockroachGlitchEffect, this.transform.position, Quaternion.identity);
                 break;
                 
             //Ìîêðèöà - óâåëè÷åíèå ÕÏ (clickToKill*glitchModify) âñåõ æèâûõ ïðîòèâíèêîâ íà ñöåíå êîòîðûå íå áûëè óñèëåíû ðàíåå
@@ -314,11 +322,15 @@ public class Enemy : MonoBehaviour, IPointerDownHandler
             case EnemyType.Wood_Louse:
                 foreach (GameObject livingEnemy in _gameController.Enemies_Alive)
                 {
-                    if (livingEnemy.GetComponent<Enemy>().clickToKill == livingEnemy.GetComponent<Enemy>().base_clickToKill)
+                    if (livingEnemy.GetComponent<Enemy>() != null) 
                     {
-                        livingEnemy.GetComponent<Enemy>().clickToKill = livingEnemy.GetComponent<Enemy>().clickToKill * glitchModify;
-                        livingEnemy.GetComponent<Animator>().SetFloat("Buffed", 0.5f);
+                        if (livingEnemy.GetComponent<Enemy>().clickToKill == livingEnemy.GetComponent<Enemy>().base_clickToKill)
+                        {
+                            livingEnemy.GetComponent<Enemy>().clickToKill = livingEnemy.GetComponent<Enemy>().clickToKill * glitchModify;
+                            livingEnemy.GetComponent<Animator>().SetFloat("Buffed", 0.5f);
+                        }
                     }
+                        
                 }
                 break;
         }

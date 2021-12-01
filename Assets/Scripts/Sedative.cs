@@ -21,8 +21,7 @@ public class Sedative : MonoBehaviour
     public enum SedativeType
     {
         Chocolate_Bar,
-        Tea,
-        Auto_Fix
+        Tea
     }
 
     private void Awake()
@@ -46,10 +45,6 @@ public class Sedative : MonoBehaviour
                     _player.StressChange(-stressAffect);
                     yield return new WaitForSeconds(1);
                 }
-                yield break;
-
-            case SedativeType.Auto_Fix:
-                SoundManagerScript.PlaySound("UseAutoTest");
                 yield break;
         }
     }

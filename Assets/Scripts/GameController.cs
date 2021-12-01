@@ -35,7 +35,8 @@ public class GameController : MonoBehaviour
         Cockroach,
         Cockroach_Glitch,
         Wood_Louse,
-        Wood_Louse_Glitch
+        Wood_Louse_Glitch,
+        Cockroach_BOSS
     }
 
     [Header("Тайминги волн")]
@@ -114,9 +115,8 @@ public class GameController : MonoBehaviour
             tickValue = -1*tickModificator;
             _player.StressChange(tickValue);
         }
-        yield return new WaitForSecondsRealtime(tickTime);
-        Debug.Log("TICK " + tickValue);
-        StartCoroutine("StressTick");
+        yield return new WaitForSeconds(tickTime);
+        StartCoroutine(StressTick());
     }
 
     //Метод для спауна врага. Принимает в себя: 1) Тип врага, 2) Точку спауна, 3) Базовый поворот врага
@@ -171,6 +171,9 @@ public class GameController : MonoBehaviour
                     case SpawnedEnemyType.Wood_Louse_Glitch:
                         Spawn(Enemies_Prefabs[3], randomPoint.InSpawnZone(), Quaternion.identity);
                         lastSpawnedEnemy.GetComponent<Enemy>().isGlitch = true;
+                        break;
+                    case SpawnedEnemyType.Cockroach_BOSS:
+                        Spawn(Enemies_Prefabs[4], randomPoint.InSpawnZone(), Quaternion.identity);
                         break;
                 }
                 yield return new WaitForSeconds(spawnDelay);
