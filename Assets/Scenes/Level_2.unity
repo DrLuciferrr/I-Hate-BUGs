@@ -248,10 +248,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   _player: {fileID: 734389068}
-  _gameController: {fileID: 0}
+  _gameController: {fileID: 2105546510}
   _text: {fileID: 851568307}
   count: 1
-  stressAffect: 30
+  stressAffect: 4
   duration: 10
 --- !u!1 &94281941
 GameObject:
@@ -491,9 +491,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   _player: {fileID: 734389068}
-  _gameController: {fileID: 0}
+  _gameController: {fileID: 2105546510}
   _text: {fileID: 1912763119}
-  count: 1
+  count: 2
   stressAffect: 20
   duration: 0
 --- !u!1 &243687012
@@ -778,7 +778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stressMether: {fileID: 777210780}
-  baseStress: 0
+  baseStress: 10
 --- !u!114 &734389069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2367,7 +2367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 224098d9fb8a80b4a8cde331aea5c11d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
+  _player: {fileID: 734389068}
   Enemies_Prefabs:
   - {fileID: 2500772835160696971, guid: 3821ca20b3a0f7c4a99c13e9361d1f57, type: 3}
   - {fileID: 3279595673138171114, guid: 521cec920b28a4646bfc4848304db38a, type: 3}
