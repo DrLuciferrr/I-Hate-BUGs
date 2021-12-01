@@ -55,7 +55,7 @@ MonoBehaviour:
   clickToKill: 1
   glitchModify: 2.5
   glitchingDuration: 5
-  glitchingCooldown: 1
+  glitchingCooldown: 3
   mod_Fail: 1.2
   mod_Glitch: 2
   mod_Kill: 1.5

@@ -35,10 +35,12 @@ public class Sedative : MonoBehaviour
         switch (type)
         {
             case SedativeType.Chocolate_Bar:
+                SoundManagerScript.PlaySound("UseChocolate");
                 _player.StressChange(-stressAffect);
                 yield break;
 
             case SedativeType.Tea:
+                SoundManagerScript.PlaySound("UseTea");
                 for (int i = 0; i <= duration; i++)
                 {
                     _player.StressChange(-stressAffect);
@@ -47,6 +49,7 @@ public class Sedative : MonoBehaviour
                 yield break;
 
             case SedativeType.Auto_Fix:
+                SoundManagerScript.PlaySound("UseAutoTest");
                 yield break;
         }
     }
