@@ -38,3 +38,6 @@ Logs/**/*.log
 *.apk
 *.unitypackage
 *.log
+Assets/AllIn1SpriteShader/URP_Import_All1Sh.unitypackage.meta
+UserSettings/EditorUserSettings.asset
+ProjectSettings/EditorBuildSettings.asset
