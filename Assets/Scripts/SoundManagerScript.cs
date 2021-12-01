@@ -58,7 +58,7 @@ public class SoundManagerScript : MonoBehaviour
             case "UseChocolate":
                 audioSrc.PlayOneShot(chocolateSound);
                 break;
-            case "UseCoffee":
+            case "UseTea":
                 audioSrc.PlayOneShot(coffeeSound);
                 break;
             case "UseAutoTest":
