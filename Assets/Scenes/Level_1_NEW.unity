@@ -1180,6 +1180,10 @@ PrefabInstance:
       value: Chocolate_Bar
       objectReference: {fileID: 0}
     - target: {fileID: 7604081435948734445, guid: 884858b60ad6da546ab19688f4bfed33, type: 3}
+      propertyPath: count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7604081435948734445, guid: 884858b60ad6da546ab19688f4bfed33, type: 3}
       propertyPath: _player
       value: 
       objectReference: {fileID: 519420030}

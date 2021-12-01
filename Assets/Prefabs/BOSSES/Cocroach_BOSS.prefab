@@ -167,8 +167,8 @@ MonoBehaviour:
   spawnedEnemy: {fileID: 7256530894989448154, guid: cf9ce32b4c867924fb0f70894ec348ee, type: 3}
   speed: 1.5
   stressFactor: 1
-  clickToKill: 100
+  clickToKill: 50
   mod_Kill: 10
-  bossEffectModificator: 5
+  bossEffectModificator: 4
   bossEffectInterwal: 0.5
-  bossEffectCooldown: 3
+  bossEffectCooldown: 4

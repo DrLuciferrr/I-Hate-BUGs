@@ -128,7 +128,7 @@ MonoBehaviour:
   _gameController: {fileID: 0}
   _text: {fileID: 5648484689636392198}
   count: 2
-  stressAffect: 30
+  stressAffect: 4
   duration: 10
 --- !u!1 &5648484689636392199
 GameObject:
