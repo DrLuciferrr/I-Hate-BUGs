@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     [SerializeField] private GameObject stressMether;
+    [SerializeField] SceneMng _sceneManager;
     [Space]
     public float baseStress;
     private float stress = 0f;
@@ -35,8 +36,8 @@ public class Player : MonoBehaviour
 
     //Метод, вызываемый при успловиях поражения
     private void GameOver()
-    { 
-        
+    {
+        _sceneManager.RestartLevel();
     }
 
   

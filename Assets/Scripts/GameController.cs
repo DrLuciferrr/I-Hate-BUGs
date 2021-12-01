@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
 {
     //Ссылка на скрипт игрока для взаимодействия с его методами
     [SerializeField] private Player _player;
-
+    [SerializeField] SceneMng _sceneManager;
     //Ссылка на массив префабов врагов
     [Header("Префабы всех врагов")]
     [Space] 
@@ -56,8 +56,9 @@ public class GameController : MonoBehaviour
         [Tooltip("Множитель")]
         [SerializeField] private float tickModificator;
         
-        private float tickValue;
-        [SerializeField] private int ID;
+    private float tickValue;
+
+    private bool spawnFinished = false;
 
     //Создаем новый экземпляр генератора точек для взаимодействия с ним
     RandomPoint randomPoint = new RandomPoint();
@@ -70,34 +71,6 @@ public class GameController : MonoBehaviour
         //Запуск корутины отвечающей за пассивный прирост стресса от кол-ва живых жуков
         StartCoroutine(StressTick());
     }
-
-    /*private void Start()
-    {
-        BGM(ID);
-    }
-
-    private void BGM(int ID)
-    {
-
-        switch (ID)
-        {
-            case 0:
-                break;
-            case 1:
-                SoundManagerScript.PlaySound("Level_1");
-                break;
-            case 2:
-                SoundManagerScript.PlaySound("Level_2");
-                break;
-            case 3:
-                SoundManagerScript.PlaySound("Level_3");
-                break;
-            case 4:
-                SoundManagerScript.PlaySound("Level_4");
-                break;
-        }
-
-    }*/
     //Корутина пассивно (раз в tickTime секкунд) увеличивающая стресс в зависимости от кол-ва живых жуков, или уменьшает если жуков нету на сцене
     private IEnumerator StressTick()
     {
@@ -128,7 +101,7 @@ public class GameController : MonoBehaviour
     //Спаунер волнами
     private IEnumerator Spawner()
     {
-        yield return new WaitUntil(() => Input.GetKeyDown("space"));
+        yield return new WaitForSeconds(5);
 
         int currentWave = 0;
         foreach (Wave wave in WaveList.Waves)
@@ -181,12 +154,19 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(waveDelay);
             currentWave++;
         }
-        
+        spawnFinished = true;
+        StartCoroutine(WinCheck());
     }
-    
-    
+    private IEnumerator WinCheck()
+    {
+        if (spawnFinished && Enemies_Alive.Capacity == 0)
+        {
+            _sceneManager.GoToNextLevel();
+        }
+        else
+            yield return null;
+    }
 }
-
 //2 класса для создания таблицы из таблиц и вывод их в инспектор
 [System.Serializable]
 public class Wave
