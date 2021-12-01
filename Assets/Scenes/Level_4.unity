@@ -2396,7 +2396,12 @@ MonoBehaviour:
     - EnemyInWave: 05000000040000000500000004000000
     - EnemyInWave: 0200000003000000
     - EnemyInWave: 04000000
-    - EnemyInWave: 04000000
+    - EnemyInWave: 00000000
+    - EnemyInWave: 00000000
+    - EnemyInWave: 01000000
+    - EnemyInWave: 00000000
+    - EnemyInWave: 01000000
+    - EnemyInWave: 08000000
   spawnDelay: 0.5
   waveDelay: 3
   tickTime: 2
